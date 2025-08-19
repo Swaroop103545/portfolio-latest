@@ -4,7 +4,6 @@ import { motion } from 'framer-motion';
 import { FiMail, FiPhone, FiMapPin, FiSend, FiGithub, FiLinkedin, FiTwitter } from 'react-icons/fi';
 import emailjs from '@emailjs/browser';
 
-// Styled Components
 const ContactContainer = styled.div`
   padding: 120px 0 80px;
   background: ${props => props.theme.colors.background};
@@ -221,7 +220,7 @@ const SubmitButton = styled(motion.button)`
     ${props => props.theme.colors.primary},
     ${props => props.theme.colors.secondary}
   );
-  color: white;
+  color: "blue";
   border: none;
   cursor: pointer;
   width: 100%;
@@ -247,7 +246,6 @@ const SuccessMessage = styled(motion.div)`
   margin-top: 1rem;
 `;
 
-// Contact Component
 const Contact = () => {
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
