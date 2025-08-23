@@ -5,7 +5,7 @@ import {
   FiCpu, FiSmartphone, FiCode, FiServer, FiCheckCircle, FiGitMerge, FiDatabase
 } from 'react-icons/fi';
 import {
-  SiReact, SiTypescript, SiJavascript, SiFlutter, SiFirebase, SiGraphql, SiJest, SiAmazonaws, SiRedux, SiGit, SiJira
+  SiReact, SiTypescript, SiJavascript, SiFlutter, SiFirebase, SiGraphql, SiJest, SiAmazonaws, SiRedux, SiGit, SiJira, SiFigma
 } from 'react-icons/si';
 import { theme } from '../styles/theme';
 
@@ -181,6 +181,7 @@ const Skills = () => {
         { name: 'TypeScript', icon: <SiTypescript /> },
         { name: 'JavaScript (ES6+)', icon: <SiJavascript /> },
         { name: 'Redux & Toolkit', icon: <SiRedux /> },
+        { name: 'RTK Query', icon: <SiRedux /> },
       ]
     },
     {
@@ -210,6 +211,7 @@ const Skills = () => {
     { name: 'GitHub', icon: <FiGitMerge /> },
     { name: 'JIRA', icon: <SiJira /> },
     { name: 'VS Code', icon: <FiCode /> },
+    { name: 'Figma', icon: <SiFigma /> },
   ];
 
   const gridVariants = {

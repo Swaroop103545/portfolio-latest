@@ -253,7 +253,7 @@ const About = () => {
 
   const skills = [
     "React Native", "Expo", "Flutter", "React.js", "TypeScript",
-    "Redux", "Redux Toolkit", "Razorpay", "Firebase", "GraphQL", "Jest",
+    "Redux", "Redux Toolkit", "Figma", "Razorpay", "Firebase", "GraphQL", "Jest",
     "Material UI", "GitHub", "JIRA", "Appium", "SQL"
   ];
 

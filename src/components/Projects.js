@@ -241,7 +241,7 @@ const Projects = () => {
       liveUrl: "",
       status: "ongoing"
     },
-    { id: 1, title: "PRAM Edu", description: "Comprehensive edu-tech platform for students, parents, and faculty.", category: "mobile", technologies: ["React Native", "Expo", "TypeScript", "Redux Toolkit", "RTK Query"], liveUrl: "https://play.google.com/store/apps/details?id=com.prameducation.pramedu", status: "completed" },
+    { id: 1, title: "PRAM Edu", description: "Comprehensive edu-tech platform for students, parents, and faculty.", category: "mobile", technologies: ["React Native", "Expo", "TypeScript", "Redux Toolkit", "RTK Query"], liveUrl: "https://apps.apple.com/in/app/pram-edu/id6502035315", status: "completed" },
     { id: 2, title: "Movingful", description: "Business referral app with rewards, friends management, and earnings tracking.", category: "mobile", technologies: ["React Native", "GraphQL", "AWS", "Apollo", "Context API", "Storybook", "Jest"], liveUrl: "https://play.google.com/store/apps/details?id=com.movingful_provider", status: "completed" },
     { id: 3, title: "WorldSchool", description: "Online teaching app with chat, appointments, and class search functionality.", category: "mobile", technologies: ["React Native", "Redux", "Native Modules"], liveUrl: "https://play.google.com/store/apps/details?id=com.worldschool", status: "completed" },
     { id: 4, title: "Portfolio Website", description: "A sleek, modern portfolio built to showcase my skills and projects.", category: "web", technologies: ["React", "Styled-Components", "Framer Motion"], status: "completed" },
