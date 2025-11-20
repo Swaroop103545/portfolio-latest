@@ -212,6 +212,25 @@ const Projects = () => {
 
   const projects = [
     {
+      id: 11,
+      title: "SmartSpend",
+      description: "A financial tracking app that helps users manage daily expenses, monitor income, and get AI-powered spending insights. Features include budget setting, expense categorization, offline-first support, and personalized financial suggestions.",
+      category: "mobile",
+      technologies: [
+        "React Native Expo",
+        "TypeScript",
+        "Redux Toolkit",
+        "GraphQL",
+        "Apollo Client",
+        "Firebase Auth",
+        "Firestore",
+        "AI Suggestions"
+      ],
+      github: "https://github.com/swaroop-prataparao/smartspend",
+      liveUrl: "",
+      status: "ongoing"
+    },
+    {
       id: 10,
       title: "SkillUp E-Learning App",
       description: "An e-learning app with offline support & CRUD, built with React Native, Redux, and GraphQL.",

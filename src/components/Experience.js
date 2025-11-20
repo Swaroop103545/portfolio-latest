@@ -202,13 +202,12 @@ const DescriptionListItem = styled.li`
 const Experience = () => {
   const experienceData = [
     {
-      role: 'Frontend Engineer',
-      company: 'Outlier (Part-time)',
+      role: 'Software Engineer',
+      company: 'Systek Pro',
       duration: 'Mar 2025 – Present',
       description: [
-        "Reviewed AI-generated code in React Native, React, CSS, TS and JS for quality, performance, and maintainability.",
-        "Provided feedback on WCAG accessibility, responsive design, and UI/UX standards.",
-        "Authored technical prompts and explanations to enhance AI contextual understanding.",
+        "Worked closely with designers to deliver a smooth, intuitive, and visually engaging user experience.",
+        "Implemented essential APIs and enhanced overall app performance through significant optimizations."
       ],
     },
     {

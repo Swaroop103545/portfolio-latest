@@ -272,10 +272,10 @@ const About = () => {
               {/* <ProfileImage src="https://via.placeholder.com/300" alt="Swaroop Prataparao" whileHover={{ scale: 1.05 }} /> */}
               <Name>Swaroop Prataparao</Name>
               <RoleTitle>Senior React Native Developer</RoleTitle>
-              <DownloadButton href={resumeUrl} download="Swaroop_Prataparao_Resume.pdf" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              {/* <DownloadButton href={resumeUrl} download="Swaroop_Prataparao_Resume.pdf" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <FiDownload />
                 Download CV
-              </DownloadButton>
+              </DownloadButton> */}
             </LeftColumn>
 
             <RightColumn>
@@ -294,7 +294,7 @@ const About = () => {
                 <StatsGrid>
                   <StatItem><StatNumber>5+</StatNumber><StatLabel>Years Experience</StatLabel></StatItem>
                   <StatItem><StatNumber>8</StatNumber><StatLabel>Completed Projects</StatLabel></StatItem>
-                  <StatItem><StatNumber>10+</StatNumber><StatLabel>Happy Clients</StatLabel></StatItem>
+                  <StatItem><StatNumber>5+</StatNumber><StatLabel>Happy Clients</StatLabel></StatItem>
                 </StatsGrid>
               </AboutSection>
 

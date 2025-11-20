@@ -302,7 +302,7 @@ const Contact = () => {
         </SectionTitle>
 
         <Content>
-          <ContactInfo variants={containerVariants} initial="hidden" animate="visible">
+          {/* <ContactInfo variants={containerVariants} initial="hidden" animate="visible">
             <InfoTitle>Contact Information</InfoTitle>
             <InfoList>
               {contactInfo.map((info, i) => (
@@ -326,7 +326,7 @@ const Contact = () => {
                 ))}
               </SocialList>
             </SocialLinks>
-          </ContactInfo>
+          </ContactInfo> */}
 
           <ContactForm onSubmit={handleSubmit} initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.6, delay: 0.2 }}>
             <FormTitle>Send Message</FormTitle>
