@@ -316,7 +316,7 @@ const Contact = () => {
               ))}
             </InfoList>
 
-            <SocialLinks initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.6, delay: 0.5 }}>
+            {/* <SocialLinks initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.6, delay: 0.5 }}>
               <SocialTitle>Follow Me</SocialTitle>
               <SocialList>
                 {socialLinks.map((social, i) => (
@@ -325,7 +325,7 @@ const Contact = () => {
                   </SocialLink>
                 ))}
               </SocialList>
-            </SocialLinks>
+            </SocialLinks> */}
           </ContactInfo>
 
           <ContactForm onSubmit={handleSubmit} initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.6, delay: 0.2 }}>

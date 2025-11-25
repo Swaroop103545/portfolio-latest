@@ -42,7 +42,7 @@ const Footers = () => {
     <FooterWrapper>
       <SocialLinks>
         <SocialLink href={githubUrl} target="_blank" rel="noopener noreferrer"><FiGithub /></SocialLink>
-        <SocialLink href={linkedinUrl} target="_blank" rel="noopener noreferrer"><FiLinkedin /></SocialLink>
+        {/* <SocialLink href={linkedinUrl} target="_blank" rel="noopener noreferrer"><FiLinkedin /></SocialLink> */}
         <SocialLink href="#" onClick={handleEmailClick}><FiMail /></SocialLink>
       </SocialLinks>
       <Copyright>&copy; {new Date().getFullYear()} Swaroop Prataparao. All Rights Reserved.</Copyright>
