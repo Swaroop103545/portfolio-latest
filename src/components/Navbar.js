@@ -185,9 +185,9 @@ const Navbar = () => {
       </Nav>
       <AnimatePresence>
         {isOpen && (
-          <MobileMenu 
-            initial={{ opacity: 0, x: '100%' }} 
-            animate={{ opacity: 1, x: 0 }} 
+          <MobileMenu
+            initial={{ opacity: 0, x: '100%' }}
+            animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: '100%' }}
             transition={{ duration: 0.3, ease: 'easeInOut' }}
           >
@@ -201,12 +201,12 @@ const Navbar = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: index * 0.1 }}
               >
-                <MobileNavLink 
-                  to={item} 
-                  spy={true} 
-                  smooth={true} 
-                  duration={500} 
-                  offset={-70} 
+                <MobileNavLink
+                  to={item}
+                  spy={true}
+                  smooth={true}
+                  duration={500}
+                  offset={-70}
                   onClick={closeMenu}
                 >
                   {item.charAt(0).toUpperCase() + item.slice(1)}

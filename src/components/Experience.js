@@ -202,13 +202,14 @@ const DescriptionListItem = styled.li`
 const Experience = () => {
   const experienceData = [
     {
-      role: 'Frontend Engineer',
-      company: 'Outlier (Part-time)',
+      role: 'Frontend Engineer (Part-time)',
+      company: 'Outlier',
       duration: 'Mar 2025 – Present',
       description: [
-        "Reviewed AI-generated code in React Native, React, CSS, TS and JS for quality, performance, and maintainability.",
-        "Provided feedback on WCAG accessibility, responsive design, and UI/UX standards.",
-        "Authored technical prompts and explanations to enhance AI contextual understanding.",
+        "Reviewed and optimized AI-generated code across React Native, React, TypeScript, and JavaScript.",
+        "Ensured adherence to performance best practices and accessibility standards (WCAG).",
+        "Improved code quality by identifying inefficiencies and suggesting scalable solutions.",
+        "Authored structured prompts to enhance AI-generated development outputs.",
       ],
     },
     {
@@ -216,42 +217,34 @@ const Experience = () => {
       company: 'Mahasos Info Pvt Ltd',
       duration: 'Oct 2024 – Feb 2025',
       description: [
-        "Delivered Parent and Student Modules while leading a small development team.",
-        "Collaborated with designers to ensure a seamless and visually appealing user experience.",
-        "Integrated critical APIs and significantly optimized application performance.",
-        "Actively participated in agile ceremonies and client-facing meetings.",
+        "Led end-to-end development of mobile applications, ensuring scalable and maintainable architecture.",
+        "Delivered Parent and Student modules with seamless navigation and optimized performance.",
+        "Integrated REST APIs and improved data handling efficiency across modules.",
+        "Collaborated with cross-functional teams in Agile environment to deliver high-quality features.",
+        "Optimized app performance, reducing load time and improving responsiveness across devices."
       ],
     },
     {
       role: 'React Native Developer',
       company: 'Astria Digital Pvt Ltd',
-      duration: 'Aug 2023 – May 2024',
+      duration: 'Sep 2023 – May 2024',
       description: [
-        "Developed a mobile application with a modern, user-friendly interface from the ground up.",
-        "Integrated native modules such as SMS and Camera for enhanced functionality.",
-        "Utilized Jest for efficient unit testing to ensure code quality and application stability.",
-        "Collaborated with backend developers to integrate APIs and ensure smooth data flow.",
+        "Developed and maintained cross-platform mobile applications using React Native.",
+        "Integrated native modules (Camera, SMS) to enhance app functionality.",
+        "Collaborated with backend teams for smooth API integration and data flow.",
+        "Implemented unit testing using Jest to ensure application reliability.",
+        "Contributed to performance improvements and bug resolution."
       ],
-    },
-    {
-      role: 'Software Developer',
-      company: 'Mayora Infotech',
-      duration: 'Aug 2022 – Nov 2022',
-      description: [
-        "Designed and implemented core features for a new mobile application.",
-        "Participated in daily stand-ups and sprint planning sessions.",
-        "Focused on debugging, testing, and improving application stability.",
-      ]
     },
     {
       role: 'Mobile App Developer',
       company: 'Freelance',
       duration: 'Sep 2019 – Present',
       description: [
-        "Designed and developed mobile applications and web front-ends for various clients.",
-        "Converted mock-ups into usable, responsive web presences with ReactJS.",
-        "Developed cross-platform mobile apps for Android and iOS using React Native.",
-        "Maintained direct communication with clients to gather requirements and deliver results."
+        "Designed and developed multiple production-grade mobile and web applications.",
+        "Managed complete development lifecycle from requirement gathering to deployment.",
+        "Built scalable UI architectures and optimized performance for better user experience.",
+        "Delivered applications with real-time features, API integrations, and secure data handling."
       ]
     }
   ];

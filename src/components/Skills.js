@@ -167,51 +167,119 @@ const Skills = () => {
       category: 'Mobile Development',
       icon: <FiSmartphone />,
       skills: [
-        { name: 'React Native', icon: <SiReact /> },
-        { name: 'Expo', icon: <SiReact /> },
-        { name: 'Flutter', icon: <SiFlutter /> },
-        { name: 'Native iOS/Android', icon: <FiCpu /> },
+        { name: 'React Native (CLI & Expo)', icon: <SiReact /> },
+        { name: 'Cross-platform Architecture', icon: <FiCpu /> },
+        { name: 'iOS & Android Build & Deployment (App Store / Play Store)', icon: <FiSmartphone /> },
       ]
     },
     {
-      category: 'Frontend & State Management',
+      category: 'Languages',
       icon: <FiCode />,
       skills: [
-        { name: 'React.js', icon: <SiReact /> },
         { name: 'TypeScript', icon: <SiTypescript /> },
         { name: 'JavaScript (ES6+)', icon: <SiJavascript /> },
-        { name: 'Redux & Toolkit', icon: <SiRedux /> },
-        { name: 'RTK Query', icon: <SiRedux /> },
+        { name: 'Java', icon: <FiCode /> },
+        { name: 'Swift', icon: <FiCode /> },
       ]
     },
     {
-      category: 'Backend & Database',
+      category: 'State Management',
+      icon: <FiDatabase />,
+      skills: [
+        { name: 'Redux Toolkit', icon: <SiRedux /> },
+        { name: 'React Query', icon: <SiReact /> },
+        { name: 'Context API', icon: <SiReact /> },
+      ]
+    },
+    {
+      category: 'API Integration',
       icon: <FiServer />,
       skills: [
-        { name: 'Firebase', icon: <SiFirebase /> },
-        { name: 'GraphQL', icon: <SiGraphql /> },
-        { name: 'REST APIs', icon: <FiDatabase /> },
-        { name: 'SQL', icon: <FiDatabase /> },
-        { name: 'AWS', icon: <SiAmazonaws /> },
+        { name: 'REST APIs', icon: <FiServer /> },
+        { name: 'Open API SDK', icon: <FiCode /> },
+        { name: 'GraphQL (Apollo/Client-side caching)', icon: <SiGraphql /> },
       ]
     },
     {
-      category: 'Testing & Quality',
+      category: 'Mobile Features',
+      icon: <FiSmartphone />,
+      skills: [
+        { name: 'Push Notifications (FCM)', icon: <FiSmartphone /> },
+        { name: 'Deep Linking & Universal Links', icon: <FiCode /> },
+        { name: 'Offline Support (AsyncStorage/MMKV)', icon: <FiDatabase /> },
+        { name: 'Background Tasks', icon: <FiCpu /> },
+        { name: 'App Lifecycle Management', icon: <FiSmartphone /> },
+      ]
+    },
+    {
+      category: 'Performance Optimization',
+      icon: <FiCpu />,
+      skills: [
+        { name: 'Re-render optimization', icon: <FiCpu /> },
+        { name: 'lazy loading', icon: <FiCpu /> },
+        { name: 'memorization', icon: <FiCpu /> },
+        { name: 'efficient state updates', icon: <FiDatabase /> },
+        { name: 'memory optimization', icon: <FiCpu /> },
+      ]
+    },
+    {
+      category: 'Payments & Transactions',
+      icon: <FiCheckCircle />,
+      skills: [
+        { name: 'Payment Gateway Integration (Razorpay)', icon: <FiCheckCircle /> },
+        { name: 'secure transaction handling', icon: <FiCheckCircle /> },
+        { name: 'checkout flows', icon: <FiCheckCircle /> },
+      ]
+    },
+    {
+      category: 'Navigation',
+      icon: <FiCode />,
+      skills: [
+        { name: 'React Navigation (complex navigation flows, deep linking)', icon: <SiReact /> },
+      ]
+    },
+    {
+      category: 'Backend & Services',
+      icon: <FiServer />,
+      skills: [
+        { name: 'Firebase (Auth, Firestore, Notifications)', icon: <SiFirebase /> },
+        { name: 'AWS integrations', icon: <SiAmazonaws /> },
+      ]
+    },
+    {
+      category: 'DevOps & Release',
+      icon: <FiGitMerge />,
+      skills: [
+        { name: 'CI/CD (GitHub Actions)', icon: <FiGitMerge /> },
+        { name: 'automated builds', icon: <FiCpu /> },
+        { name: 'App Store & Play Store release management', icon: <FiSmartphone /> },
+      ]
+    },
+    {
+      category: 'Testing',
       icon: <FiCheckCircle />,
       skills: [
         { name: 'Jest', icon: <SiJest /> },
-        { name: 'Appium', icon: <FiCpu /> },
-        { name: 'Unit & E2E Testing', icon: <FiCheckCircle /> },
+        { name: 'Appium (unit & basic E2E testing)', icon: <FiCpu /> },
       ]
     },
+    {
+      category: 'AI-Assisted Development',
+      icon: <FiCpu />,
+      skills: [
+        { name: 'Prompt Engineering', icon: <FiCode /> },
+        { name: 'Workflow Automation', icon: <FiCpu /> },
+        { name: 'Code Generation & Debugging (Cursor, Claude)', icon: <FiCode /> },
+      ]
+    }
   ];
 
   const tools = [
+    { name: 'Xcode', icon: <FiCode /> },
+    { name: 'Android Studio', icon: <FiSmartphone /> },
     { name: 'Git', icon: <SiGit /> },
     { name: 'GitHub', icon: <FiGitMerge /> },
     { name: 'JIRA', icon: <SiJira /> },
-    { name: 'VS Code', icon: <FiCode /> },
-    { name: 'Figma', icon: <SiFigma /> },
   ];
 
   const gridVariants = {

@@ -252,9 +252,12 @@ const About = () => {
   };
 
   const skills = [
-    "React Native", "Expo", "Flutter", "React.js", "TypeScript",
-    "Redux", "Redux Toolkit", "Figma", "Razorpay", "Firebase", "GraphQL", "Jest",
-    "Material UI", "GitHub", "JIRA", "Appium", "SQL"
+    "React Native (CLI & Expo)", "Cross-platform Architecture", "TypeScript", "JavaScript",
+    "Java", "Swift", "Redux Toolkit", "React Query", "Context API",
+    "REST APIs", "Open API SDK", "GraphQL", "Push Notifications",
+    "Deep Linking", "Offline Support (MMKV)", "App Lifecycle", "Performance Optimization",
+    "Razorpay", "React Navigation", "Firebase", "AWS", "GitHub Actions",
+    "Jest", "Appium", "Prompt Engineering", "Cursor", "Claude"
   ];
 
   const resumeUrl = "/Swaroop_Prataparao_Sr_React_Native_Developer.pdf";
@@ -310,8 +313,8 @@ const About = () => {
               <AboutSection variants={itemVariants} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.5 }}>
                 <SectionSubheader>Education</SectionSubheader>
                 <EducationList>
-                  <EducationItem><EducationDegree>Masters in Computer Science</EducationDegree><EducationSchool>Manipal University - 2022</EducationSchool></EducationItem>
-                  <EducationItem><EducationDegree>Bachelors in Computer Science</EducationDegree><EducationSchool>Sri Gayatri Degree College - 2019</EducationSchool></EducationItem>
+                  <EducationItem><EducationDegree>Master's in Computer Science</EducationDegree><EducationSchool>Manipal University - 2022 | CGPA: 7.8</EducationSchool></EducationItem>
+                  <EducationItem><EducationDegree>Bachelor's in Computer Science</EducationDegree><EducationSchool>Sri Gayatri Degree College - 2019 | CGPA: 7.8</EducationSchool></EducationItem>
                 </EducationList>
               </AboutSection>
             </RightColumn>
