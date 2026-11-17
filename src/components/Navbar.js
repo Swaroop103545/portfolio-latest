@@ -1,222 +1,373 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-scroll';
-import { FiMenu, FiX } from 'react-icons/fi';
+import { FiMenu, FiX, FiDownload, FiArrowUpRight } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const Nav = styled.nav`
+const NavHeader = styled.header`
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  padding: 1rem 2rem;
+  z-index: 1000;
+  padding: ${props => (props.scrolled ? '0.75rem 1.5rem' : '1.25rem 1.5rem')};
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  justify-content: center;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    padding: ${props => (props.scrolled ? '0.45rem 0.75rem' : '0.65rem 0.75rem')};
+  }
+`;
+
+const NavContainer = styled.nav`
+  width: 100%;
+  max-width: 1200px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 1000;
-  transition: all 0.3s ease-in-out;
-  background: ${props => props.scrolled ? 'rgba(10, 10, 10, 0.8)' : 'transparent'};
-  backdrop-filter: ${props => props.scrolled ? 'blur(10px)' : 'none'};
+  padding: 0.65rem 1.25rem;
+  border-radius: 9999px;
+  background: ${props =>
+    props.scrolled ? 'rgba(13, 17, 26, 0.88)' : 'rgba(17, 23, 38, 0.55)'};
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid ${props =>
+    props.scrolled ? 'rgba(99, 102, 241, 0.25)' : 'rgba(255, 255, 255, 0.08)'};
+  box-shadow: ${props =>
+    props.scrolled ? '0 10px 30px -10px rgba(0, 0, 0, 0.5), 0 0 15px rgba(99, 102, 241, 0.1)' : 'none'};
+  transition: all 0.3s ease;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    padding: 0.45rem 0.75rem;
+  }
 `;
 
-const Logo = styled(Link)`
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #fff;
+const LogoContainer = styled(Link)`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
   cursor: pointer;
+  text-decoration: none;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    gap: 0.5rem;
+  }
+`;
+
+const LogoBadge = styled.div`
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: ${props => props.theme.gradients.primary};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: #fff;
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+  flex-shrink: 0;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    width: 34px;
+    height: 34px;
+    font-size: 0.95rem;
+    border-radius: 8px;
+  }
+`;
+
+const LogoText = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobileSm}) {
+    display: none;
+  }
+`;
+
+const BrandName = styled.span`
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: #fff;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+`;
+
+const BrandTitle = styled.span`
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: ${props => props.theme.colors.cyanLight};
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    display: none;
+  }
 `;
 
 const NavLinks = styled.div`
   display: flex;
-  gap: 2rem;
+  align-items: center;
+  gap: 0.5rem;
+
   @media (max-width: ${props => props.theme.breakpoints.tablet}) {
     display: none;
   }
 `;
 
-const NavLink = styled(Link)`
+const NavItem = styled(Link)`
   color: ${props => props.theme.colors.textSecondary};
-  cursor: pointer;
-  position: relative;
-  transition: color 0.3s ease;
+  font-size: 0.9rem;
   font-weight: 500;
-
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background-color: ${props => props.theme.colors.primary};
-    transform: scaleX(0);
-    transition: transform 0.3s ease;
-  }
-
-  &:hover, &.active {
-    color: #fff;
-    &::after {
-      transform: scaleX(1);
-    }
-  }
-`;
-
-const MobileMenuIcon = styled.div`
-  display: none;
-  font-size: 1.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
   cursor: pointer;
-  color: #fff;
-  padding: 0.5rem;
-  border-radius: 4px;
-  transition: background-color 0.3s ease;
-  
+  transition: all 0.25s ease;
+  position: relative;
+
   &:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    background: rgba(255, 255, 255, 0.05);
   }
-  
-  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
-    display: block;
+
+  &.active {
+    color: #fff;
+    background: rgba(99, 102, 241, 0.15);
+    border: 1px solid rgba(99, 102, 241, 0.3);
   }
 `;
 
-const MobileMenu = styled(motion.div)`
+const NavActions = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    gap: 0.45rem;
+  }
+`;
+
+const ResumeButton = styled.a`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 9999px;
+  color: #fff;
+  background: ${props => props.theme.gradients.primary};
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+  white-space: nowrap;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.5);
+    color: #fff;
+  }
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.76rem;
+    gap: 0.3rem;
+  }
+`;
+
+const MobileMenuToggle = styled.button`
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-size: 1.25rem;
+  cursor: pointer;
+  flex-shrink: 0;
+
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    display: flex;
+  }
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    width: 34px;
+    height: 34px;
+    font-size: 1.1rem;
+  }
+`;
+
+const MobileMenuOverlay = styled(motion.div)`
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  background: rgba(10, 10, 10, 0.98);
-  backdrop-filter: blur(15px);
+  inset: 0;
+  background: rgba(8, 9, 14, 0.98);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  z-index: 2000;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 2rem;
-  z-index: 2000;
-  padding: 2rem;
-  box-sizing: border-box;
+  padding: max(1.75rem, env(safe-area-inset-top, 1.75rem)) 1.5rem max(1.75rem, env(safe-area-inset-bottom, 1.75rem));
+  overflow-y: auto;
 `;
 
-const MobileNavLink = styled(NavLink)`
-  font-size: 1.8rem;
-  font-weight: 600;
-  padding: 1rem 2rem;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  text-align: center;
-  min-width: 200px;
-  
-  &:hover {
-    background-color: rgba(138, 43, 226, 0.2);
-    transform: translateY(-2px);
-  }
-  
-  &:active {
-    transform: translateY(0);
-  }
-`;
-
-const CloseButton = styled(MobileMenuIcon)`
-  position: absolute;
-  top: 1.5rem;
-  right: 2rem;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
+const MobileMenuHeader = styled.div`
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.2);
+  margin-bottom: 3rem;
+`;
+
+const MobileNavList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  flex: 1;
+`;
+
+const MobileNavItem = styled(Link)`
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: ${props => props.theme.colors.text};
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+
+  &:hover, &.active {
+    color: ${props => props.theme.colors.primaryLight};
   }
 `;
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const navItems = ['about', 'experience', 'skills', 'projects', 'contact'];
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      setScrolled(window.scrollY > 40);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Body scroll lock when menu is open
   useEffect(() => {
-    if (isOpen) {
+    if (menuOpen) {
       document.body.style.overflow = 'hidden';
-      document.body.style.position = 'fixed';
-      document.body.style.width = '100%';
     } else {
       document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
     }
-
     return () => {
       document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
     };
-  }, [isOpen]);
+  }, [menuOpen]);
 
-  const toggleMenu = () => setIsOpen(!isOpen);
-  const closeMenu = () => setIsOpen(false);
+  const navItems = [
+    { name: 'About', target: 'about' },
+    { name: 'Experience', target: 'experience' },
+    { name: 'Skills', target: 'skills' },
+    { name: 'Projects', target: 'projects' },
+    { name: 'Contact', target: 'contact' },
+  ];
+
+  const resumeUrl = "/Swaroop_Prataparao_Sr_React_Native_Developer.pdf";
 
   return (
-    <>
-      <Nav scrolled={scrolled}>
-        <Logo to="hero" smooth={true} duration={500}>SP.</Logo>
+    <NavHeader scrolled={scrolled}>
+      <NavContainer scrolled={scrolled}>
+        <LogoContainer to="hero" smooth={true} duration={500}>
+          <LogoBadge>SP</LogoBadge>
+          <LogoText>
+            <BrandName>Swaroop Prataparao</BrandName>
+            <BrandTitle>Sr. React Native Dev</BrandTitle>
+          </LogoText>
+        </LogoContainer>
+
         <NavLinks>
           {navItems.map(item => (
-            <NavLink key={item} to={item} spy={true} smooth={true} duration={500} offset={-70}>
-              {item.charAt(0).toUpperCase() + item.slice(1)}
-            </NavLink>
+            <NavItem
+              key={item.target}
+              to={item.target}
+              spy={true}
+              smooth={true}
+              duration={500}
+              offset={-90}
+            >
+              {item.name}
+            </NavItem>
           ))}
         </NavLinks>
-        <MobileMenuIcon onClick={toggleMenu}>
-          {isOpen ? <FiX /> : <FiMenu />}
-        </MobileMenuIcon>
-      </Nav>
+
+        <NavActions>
+          <ResumeButton href={resumeUrl} download="Swaroop_Prataparao_Resume.pdf">
+            <FiDownload />
+            <span>Resume</span>
+          </ResumeButton>
+
+          <MobileMenuToggle onClick={() => setMenuOpen(true)} aria-label="Open navigation menu">
+            <FiMenu />
+          </MobileMenuToggle>
+        </NavActions>
+      </NavContainer>
+
       <AnimatePresence>
-        {isOpen && (
-          <MobileMenu
-            initial={{ opacity: 0, x: '100%' }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: '100%' }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
+        {menuOpen && (
+          <MobileMenuOverlay
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.25 }}
           >
-            <CloseButton onClick={closeMenu}>
-              <FiX />
-            </CloseButton>
-            {navItems.map((item, index) => (
-              <motion.div
-                key={item}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: index * 0.1 }}
-              >
-                <MobileNavLink
-                  to={item}
+            <MobileMenuHeader>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <LogoBadge>SP</LogoBadge>
+                <BrandName>Swaroop Prataparao</BrandName>
+              </div>
+              <MobileMenuToggle onClick={() => setMenuOpen(false)} aria-label="Close navigation menu">
+                <FiX />
+              </MobileMenuToggle>
+            </MobileMenuHeader>
+
+            <MobileNavList>
+              {navItems.map(item => (
+                <MobileNavItem
+                  key={item.target}
+                  to={item.target}
                   spy={true}
                   smooth={true}
                   duration={500}
-                  offset={-70}
-                  onClick={closeMenu}
+                  offset={-80}
+                  onClick={() => setMenuOpen(false)}
                 >
-                  {item.charAt(0).toUpperCase() + item.slice(1)}
-                </MobileNavLink>
-              </motion.div>
-            ))}
-          </MobileMenu>
+                  <span>{item.name}</span>
+                  <FiArrowUpRight size={20} />
+                </MobileNavItem>
+              ))}
+            </MobileNavList>
+
+            <div style={{ marginTop: 'auto', paddingTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <ResumeButton href={resumeUrl} download="Swaroop_Prataparao_Resume.pdf" style={{ justifyContent: 'center', padding: '0.9rem' }}>
+                <FiDownload size={18} />
+                <span>Download Full CV</span>
+              </ResumeButton>
+              <p style={{ textAlign: 'center', color: '#64748b', fontSize: '0.8rem' }}>
+                swaroopprataparao@gmail.com • +91 8341114950
+              </p>
+            </div>
+          </MobileMenuOverlay>
         )}
       </AnimatePresence>
-    </>
+    </NavHeader>
   );
 };
 

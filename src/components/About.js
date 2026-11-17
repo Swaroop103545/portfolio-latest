@@ -1,46 +1,43 @@
 import React from 'react';
-import styled, { ThemeProvider } from 'styled-components';
+import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { FiDownload, FiAward, FiUsers, FiCode } from 'react-icons/fi';
+import {
+  FiDownload,
+  FiBookOpen,
+  FiAward,
+  FiCpu,
+  FiCheck,
+  FiLayers,
+  FiShield,
+  FiSmartphone,
+  FiExternalLink
+} from 'react-icons/fi';
+import { SiReact, SiTypescript, SiRedux, SiFirebase, SiApple, SiGoogleplay } from 'react-icons/si';
 
-const theme = {
-  colors: {
-    background: '#0a0a0a',
-    text: '#E0E0E0',
-    textSecondary: '#a0a0a0',
-    primary: '#8A2BE2',
-    cardBg: 'rgba(22, 22, 22, 0.6)',
-    cardBorder: 'rgba(255, 255, 255, 0.1)',
-    cardBorderHover: 'rgba(138, 43, 226, 0.8)',
-  },
-  breakpoints: {
-    desktop: '992px',
-  },
-};
-
-const AboutWrapper = styled.section`
+const AboutSection = styled.section`
+  padding: 100px 1.5rem;
   position: relative;
-  min-height: 100vh;
-  padding: 100px 2rem;
-  background: ${props => props.theme.colors.background};
   overflow: hidden;
+  background: ${props => props.theme.colors.backgroundSecondary};
 
   &::before {
     content: '';
     position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 900px;
-    height: 900px;
-    background-image: radial-gradient(
-      circle,
-      ${props => props.theme.colors.primary}22,
-      transparent 60%
-    );
-    transform: translate(-50%, -50%);
+    bottom: 0;
+    right: 0;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(6, 182, 212, 0.08) 0%, transparent 70%);
     filter: blur(100px);
-    z-index: 0;
-    animation: pulse 20s infinite ease-in-out alternate;
+    pointer-events: none;
+  }
+
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    padding: 75px 1rem;
+  }
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    padding: 60px 0.75rem;
   }
 `;
 
@@ -53,275 +50,563 @@ const Container = styled.div`
 
 const SectionHeader = styled(motion.div)`
   text-align: center;
-  margin-bottom: 5rem;
+  margin-bottom: 4rem;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    margin-bottom: 2rem;
+  }
+`;
+
+const SectionTag = styled.span`
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: ${props => props.theme.colors.primaryLight};
+  background: rgba(99, 102, 241, 0.1);
+  padding: 0.35rem 1rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  margin-bottom: 1rem;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    font-size: 0.74rem;
+    padding: 0.3rem 0.85rem;
+    letter-spacing: 1.5px;
+    margin-bottom: 0.75rem;
+  }
 `;
 
 const SectionTitle = styled.h2`
-  font-size: 3rem;
+  font-size: clamp(1.8rem, 5.5vw, 3rem);
   font-weight: 800;
-  color: #fff;
   letter-spacing: -1px;
-`;
+  color: #fff;
+  margin-bottom: 0.75rem;
 
-const AboutGrid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 4rem;
-
-  @media (min-width: ${props => props.theme.breakpoints.desktop}) {
-    grid-template-columns: 1fr 2fr;
-    gap: 5rem;
+  span {
+    background: ${props => props.theme.gradients.cyanIndigo};
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
-`;
 
-const LeftColumn = styled(motion.div)`
-  text-align: center;
-  @media (min-width: ${props => props.theme.breakpoints.desktop}) {
-    text-align: left;
-    position: sticky;
-    top: 100px;
-    align-self: start;
-  }
-`;
-
-const ProfileImage = styled(motion.img)`
-  width: 250px;
-  height: 250px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid ${props => props.theme.colors.cardBorder};
-  margin: 0 auto 1.5rem;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-  transition: all 0.3s ease;
-
-  &:hover {
-    border-color: ${props => props.theme.colors.primary};
-    box-shadow: 0 0 25px ${props => props.theme.colors.primary}70;
-  }
-  
-  @media (min-width: ${props => props.theme.breakpoints.desktop}) {
-    width: 280px;
-    height: 280px;
-    margin: 0 0 1.5rem;
-  }
-`;
-
-const Name = styled.h1`
-    font-size: 2.2rem;
-    font-weight: 700;
-    color: #fff;
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    letter-spacing: -0.5px;
     margin-bottom: 0.5rem;
-`;
-
-const RoleTitle = styled.h3`
-    font-size: 1.1rem;
-    font-weight: 500;
-    color: ${props => props.theme.colors.primary};
-    margin-bottom: 1.5rem;
-`;
-
-const DownloadButton = styled(motion.a)`
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.8rem 1.8rem;
-  border: 1px solid ${props => props.theme.colors.cardBorder};
-  background: transparent;
-  color: ${props => props.theme.colors.text};
-  border-radius: 100px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(5px);
-  text-decoration: none;
-  
-  &:hover {
-    color: #fff;
-    background: ${props => props.theme.colors.primary}40;
-    border-color: ${props => props.theme.colors.primary}80;
-    transform: translateY(-2px);
   }
 `;
 
-const RightColumn = styled(motion.div)`
+const SectionSubtitle = styled.p`
+  font-size: 1.05rem;
+  color: ${props => props.theme.colors.textSecondary};
+  max-width: 650px;
+  margin: 0 auto;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    font-size: 0.92rem;
+    line-height: 1.6;
+  }
+`;
+
+const BentoGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1.5rem;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    gap: 1rem;
+  }
+`;
+
+const BentoCard = styled(motion.div)`
+  background: ${props => props.theme.colors.cardBg};
+  border: 1px solid ${props => props.theme.colors.cardBorder};
+  border-radius: 20px;
+  padding: 2rem;
+  backdrop-filter: blur(12px);
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+
+  &:hover {
+    border-color: ${props => props.theme.colors.cardBorderHover};
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+  }
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    padding: 1.25rem 1rem;
+    border-radius: 16px;
+  }
 `;
 
-const AboutSection = styled(motion.div)``;
+const SummaryCard = styled(BentoCard)`
+  grid-column: span 8;
 
-const SectionSubheader = styled.h3`
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #fff;
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid ${props => props.theme.colors.cardBorder};
+  @media (max-width: ${props => props.theme.breakpoints.desktop}) {
+    grid-column: span 12;
+  }
 `;
 
-const Description = styled.p`
+const StatsCard = styled(BentoCard)`
+  grid-column: span 4;
+  justify-content: space-between;
+
+  @media (max-width: ${props => props.theme.breakpoints.desktop}) {
+    grid-column: span 12;
+  }
+`;
+
+const PillarsCard = styled(BentoCard)`
+  grid-column: span 7;
+
+  @media (max-width: ${props => props.theme.breakpoints.desktop}) {
+    grid-column: span 12;
+  }
+`;
+
+const EducationCard = styled(BentoCard)`
+  grid-column: span 5;
+
+  @media (max-width: ${props => props.theme.breakpoints.desktop}) {
+    grid-column: span 12;
+  }
+`;
+
+const CardHeader = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+`;
+
+const CardIcon = styled.div`
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(99, 102, 241, 0.15);
+  color: ${props => props.theme.colors.primaryLight};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    width: 36px;
+    height: 36px;
+    font-size: 1.05rem;
+  }
+`;
+
+const CardTitle = styled.h3`
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    font-size: 1.15rem;
+  }
+`;
+
+const BioParagraph = styled.p`
   font-size: 1rem;
-  line-height: 1.8;
+  line-height: 1.75;
   color: ${props => props.theme.colors.textSecondary};
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    font-size: 0.92rem;
+    line-height: 1.65;
+    margin-bottom: 1rem;
+  }
+`;
+
+const HighlightBadgeRow = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1.5rem;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    gap: 0.45rem;
+    margin-top: 1.25rem;
+  }
+`;
+
+const HighlightBadge = styled.span`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #e2e8f0;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    font-size: 0.74rem;
+    padding: 0.35rem 0.65rem;
+    word-break: break-word;
+  }
 `;
 
 const StatsGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+  margin-top: 1rem;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    gap: 0.75rem;
+  }
 `;
 
 const StatItem = styled.div`
-  padding: 1.5rem;
-  background: ${props => props.theme.colors.cardBg};
-  border: 1px solid ${props => props.theme.colors.cardBorder};
-  border-radius: 12px;
+  padding: 1.25rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
   text-align: center;
-`;
-
-const StatNumber = styled.div`
-  font-size: 2rem;
-  font-weight: 700;
-  color: ${props => props.theme.colors.primary};
-`;
-
-const StatLabel = styled.div`
-  font-size: 0.8rem;
-  color: ${props => props.theme.colors.textSecondary};
-  text-transform: uppercase;
-  letter-spacing: 1px;
-`;
-
-const SkillsList = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-`;
-
-const SkillTag = styled(motion.span)`
-  padding: 0.5rem 1rem;
-  background: ${props => props.theme.colors.cardBg};
-  border: 1px solid ${props => props.theme.colors.cardBorder};
-  border-radius: 8px;
-  font-size: 0.9rem;
-  color: ${props => props.theme.colors.textSecondary};
   transition: all 0.3s ease;
 
   &:hover {
-    color: #fff;
-    background: ${props => props.theme.colors.primary}40;
-    border-color: ${props => props.theme.colors.primary}80;
+    background: rgba(99, 102, 241, 0.08);
+    border-color: rgba(99, 102, 241, 0.25);
   }
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    padding: 0.9rem 0.6rem;
+    border-radius: 10px;
+  }
+`;
+
+const StatNumber = styled.div`
+  font-size: 2.2rem;
+  font-weight: 800;
+  background: ${props => props.theme.gradients.primary};
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.1;
+  margin-bottom: 0.35rem;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    font-size: 1.85rem;
+  }
+`;
+
+const StatLabel = styled.div`
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: ${props => props.theme.colors.textSecondary};
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    font-size: 0.7rem;
+    letter-spacing: 0.5px;
+  }
+`;
+
+const PillarsList = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+  }
+`;
+
+const PillarItem = styled.div`
+  padding: 1.2rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    padding: 1rem 0.85rem;
+  }
+`;
+
+const PillarTitle = styled.div`
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  svg {
+    color: ${props => props.theme.colors.cyanLight};
+  }
+`;
+
+const PillarDesc = styled.div`
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: ${props => props.theme.colors.textSecondary};
 `;
 
 const EducationList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.25rem;
 `;
 
 const EducationItem = styled.div`
-  padding: 1rem 1.5rem;
-  background: ${props => props.theme.colors.cardBg};
-  border-radius: 10px;
-  border-left: 3px solid ${props => props.theme.colors.cardBorder};
+  padding: 1.2rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-left: 3px solid ${props => props.theme.colors.primaryLight};
+  border-radius: 12px;
   transition: all 0.3s ease;
-  
+
   &:hover {
-    border-left-color: ${props => props.theme.colors.primary};
+    border-color: ${props => props.theme.colors.primary};
+    background: rgba(99, 102, 241, 0.05);
   }
 `;
 
-const EducationDegree = styled.div`
-  font-weight: 600;
-  color: ${props => props.theme.colors.text};
+const DegreeTitle = styled.div`
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.25rem;
 `;
 
-const EducationSchool = styled.div`
-  color: ${props => props.theme.colors.textSecondary};
-  font-size: 0.9rem;
+const University = styled.div`
+  font-size: 0.88rem;
+  color: ${props => props.theme.colors.primaryLight};
+  font-weight: 500;
+  margin-bottom: 0.35rem;
 `;
 
+const EduMeta = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.75rem;
+  color: ${props => props.theme.colors.textMuted};
+
+  span.badge {
+    background: rgba(16, 185, 129, 0.12);
+    color: #34d399;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+`;
 
 const About = () => {
-  const itemVariants = {
-    hidden: { y: 30, opacity: 0 },
-    visible: { y: 0, opacity: 1, transition: { duration: 0.6, ease: "easeOut" } },
-  };
-
-  const skills = [
-    "React Native (CLI & Expo)", "Cross-platform Architecture", "TypeScript", "JavaScript",
-    "Java", "Swift", "Redux Toolkit", "React Query", "Context API",
-    "REST APIs", "Open API SDK", "GraphQL", "Push Notifications",
-    "Deep Linking", "Offline Support (MMKV)", "App Lifecycle", "Performance Optimization",
-    "Razorpay", "React Navigation", "Firebase", "AWS", "GitHub Actions",
-    "Jest", "Appium", "Prompt Engineering", "Cursor", "Claude"
-  ];
-
-  const resumeUrl = "/Swaroop_Prataparao_Sr_React_Native_Developer.pdf";
-
   return (
-    <ThemeProvider theme={theme}>
-      <AboutWrapper>
-        <Container>
-          <SectionHeader initial={{ y: -30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.6 }}>
-            {/* <SectionTitle>About Me</SectionTitle> */}
-          </SectionHeader>
+    <AboutSection id="about">
+      <Container>
+        <SectionHeader
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <SectionTag>Professional Profile</SectionTag>
+          <SectionTitle>
+            Architecting Seamless <span>Mobile & Web</span> Solutions
+          </SectionTitle>
+          <SectionSubtitle>
+            A closer look into my background, engineering philosophy, and cross-platform journey.
+          </SectionSubtitle>
+        </SectionHeader>
 
-          <AboutGrid>
-            <LeftColumn initial={{ x: -50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ duration: 0.8, delay: 0.2 }}>
-              {/* <ProfileImage src="https://via.placeholder.com/300" alt="Swaroop Prataparao" whileHover={{ scale: 1.05 }} /> */}
-              <Name>Swaroop Prataparao</Name>
-              <RoleTitle>Senior React Native Developer</RoleTitle>
-              <DownloadButton href={resumeUrl} download="Swaroop_Prataparao_Resume.pdf" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <FiDownload />
-                Download CV
-              </DownloadButton>
-            </LeftColumn>
+        <BentoGrid>
+          <SummaryCard
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <CardHeader>
+              <CardIcon>
+                <FiLayers />
+              </CardIcon>
+              <div>
+                <CardTitle>Professional Summary</CardTitle>
+                <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
+                  Full Lifecycle Engineering & AI-Assisted Development
+                </span>
+              </div>
+            </CardHeader>
 
-            <RightColumn>
-              <AboutSection variants={itemVariants} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.5 }}>
-                <SectionSubheader>My Story</SectionSubheader>
-                <Description>
-                  I'm a versatile Mobile App Developer with over 5 years of experience in designing and developing cross-platform applications using React Native, Expo, and related technologies.
-                </Description>
-                <Description>
-                  My expertise includes implementing role-based access controls, optimizing API performance, and ensuring seamless user experiences. I'm passionate about problem-solving and continuously learning new technologies to deliver high-quality, impactful applications.
-                </Description>
-              </AboutSection>
+            <BioParagraph>
+              React Native and Frontend Developer with experience building cross-platform mobile applications and responsive web interfaces using <strong>React Native, React.js, TypeScript, JavaScript, and Next.js</strong>. Skilled in modular application architecture, state management, REST and GraphQL API integration, performance optimization, reusable component development, and Figma-to-code implementation.
+            </BioParagraph>
 
-              <AboutSection variants={itemVariants} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.5 }}>
-                <SectionSubheader>Career Snapshot</SectionSubheader>
-                <StatsGrid>
-                  <StatItem><StatNumber>5+</StatNumber><StatLabel>Years Experience</StatLabel></StatItem>
-                  <StatItem><StatNumber>8</StatNumber><StatLabel>Completed Projects</StatLabel></StatItem>
-                  <StatItem><StatNumber>10+</StatNumber><StatLabel>Happy Clients</StatLabel></StatItem>
-                </StatsGrid>
-              </AboutSection>
+            <BioParagraph>
+              Experienced in delivering features across the development lifecycle, collaborating with cross-functional teams, integrating native device capabilities (Camera, SMS, Push Notifications, Deep Linking), and supporting application testing, debugging, and production releases on both the <strong>Apple App Store</strong> and <strong>Google Play Store</strong>.
+            </BioParagraph>
 
-              <AboutSection variants={itemVariants} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.5 }}>
-                <SectionSubheader>Skills & Technologies</SectionSubheader>
-                <SkillsList>
-                  {skills.map((skill) => (
-                    <SkillTag key={skill} whileHover={{ y: -2 }}>{skill}</SkillTag>
-                  ))}
-                </SkillsList>
-              </AboutSection>
+            <BioParagraph>
+              Additionally experienced at <strong>Outlier</strong> evaluating AI-generated code and providing structured technical feedback on code quality, maintainability, WCAG accessibility, and runtime performance.
+            </BioParagraph>
 
-              <AboutSection variants={itemVariants} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.5 }}>
-                <SectionSubheader>Education</SectionSubheader>
-                <EducationList>
-                  <EducationItem><EducationDegree>Master's in Computer Science</EducationDegree><EducationSchool>Manipal University - 2022 | CGPA: 7.8</EducationSchool></EducationItem>
-                  <EducationItem><EducationDegree>Bachelor's in Computer Science</EducationDegree><EducationSchool>Sri Gayatri Degree College - 2019 | CGPA: 7.8</EducationSchool></EducationItem>
-                </EducationList>
-              </AboutSection>
-            </RightColumn>
-          </AboutGrid>
-        </Container>
-      </AboutWrapper>
-    </ThemeProvider>
+            <HighlightBadgeRow>
+              <HighlightBadge><SiReact color="#38bdf8" /> React Native CLI & Expo</HighlightBadge>
+              <HighlightBadge><SiTypescript color="#60a5fa" /> TypeScript</HighlightBadge>
+              <HighlightBadge><SiRedux color="#a855f7" /> Redux Toolkit & RTK Query</HighlightBadge>
+              <HighlightBadge><SiFirebase color="#f59e0b" /> Firebase & AWS</HighlightBadge>
+              <HighlightBadge><SiApple color="#fff" /> App Store</HighlightBadge>
+              <HighlightBadge><SiGoogleplay color="#34d399" /> Google Play</HighlightBadge>
+            </HighlightBadgeRow>
+          </SummaryCard>
+
+          <StatsCard
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+          >
+            <div>
+              <CardHeader>
+                <CardIcon>
+                  <FiAward />
+                </CardIcon>
+                <div>
+                  <CardTitle>Key Metrics</CardTitle>
+                  <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Measurable Impact</span>
+                </div>
+              </CardHeader>
+            </div>
+
+            <StatsGrid>
+              <StatItem>
+                <StatNumber>5+</StatNumber>
+                <StatLabel>Years Experience</StatLabel>
+              </StatItem>
+              <StatItem>
+                <StatNumber>15+</StatNumber>
+                <StatLabel>Delivered Modules</StatLabel>
+              </StatItem>
+              <StatItem>
+                <StatNumber>100k+</StatNumber>
+                <StatLabel>Users Served</StatLabel>
+              </StatItem>
+              <StatItem>
+                <StatNumber>99.9%</StatNumber>
+                <StatLabel>Crash-Free Target</StatLabel>
+              </StatItem>
+            </StatsGrid>
+          </StatsCard>
+
+          <PillarsCard
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.15 }}
+          >
+            <CardHeader>
+              <CardIcon>
+                <FiCpu />
+              </CardIcon>
+              <div>
+                <CardTitle>Core Engineering Pillars</CardTitle>
+                <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>How I build software</span>
+              </div>
+            </CardHeader>
+
+            <PillarsList>
+              <PillarItem>
+                <PillarTitle>
+                  <FiSmartphone />
+                  Modular Mobile Architecture
+                </PillarTitle>
+                <PillarDesc>
+                  Reusable components, clean layer segregation, role-based navigation, and seamless Figma-to-code translations.
+                </PillarDesc>
+              </PillarItem>
+
+              <PillarItem>
+                <PillarTitle>
+                  <FiLayers />
+                  State & Offline First
+                </PillarTitle>
+                <PillarDesc>
+                  Redux Toolkit, RTK Query, React Query, Zustand, with ultra-fast AsyncStorage and MMKV caching.
+                </PillarDesc>
+              </PillarItem>
+
+              <PillarItem>
+                <PillarTitle>
+                  <FiShield />
+                  Native Device Features
+                </PillarTitle>
+                <PillarDesc>
+                  Deep Linking, Push Notifications (FCM), Razorpay payments, SMS integration, and Camera native modules.
+                </PillarDesc>
+              </PillarItem>
+
+              <PillarItem>
+                <PillarTitle>
+                  <FiCheck />
+                  AI & Quality Assurance
+                </PillarTitle>
+                <PillarDesc>
+                  Rigorous Jest testing, Appium, WCAG accessibility compliance, and prompt-engineered workflows.
+                </PillarDesc>
+              </PillarItem>
+            </PillarsList>
+          </PillarsCard>
+
+          <EducationCard
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <CardHeader>
+              <CardIcon>
+                <FiBookOpen />
+              </CardIcon>
+              <div>
+                <CardTitle>Education</CardTitle>
+                <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Academic Foundation</span>
+              </div>
+            </CardHeader>
+
+            <EducationList>
+              <EducationItem>
+                <DegreeTitle>Master’s in Computer Science</DegreeTitle>
+                <University>Manipal University</University>
+                <EduMeta>
+                  <span>Graduated 2022</span>
+                  <span className="badge">CGPA: 7.8</span>
+                </EduMeta>
+              </EducationItem>
+
+              <EducationItem>
+                <DegreeTitle>Bachelor’s in Computer Science</DegreeTitle>
+                <University>Sri Gayatri Degree College</University>
+                <EduMeta>
+                  <span>Graduated 2019</span>
+                  <span className="badge">CGPA: 7.8</span>
+                </EduMeta>
+              </EducationItem>
+            </EducationList>
+          </EducationCard>
+        </BentoGrid>
+      </Container>
+    </AboutSection>
   );
 };
 

@@ -1,42 +1,69 @@
-import React from 'react';
-import styled, { ThemeProvider } from 'styled-components';
-import { motion } from 'framer-motion';
+import React, { useState, useMemo } from 'react';
+import styled from 'styled-components';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
-  FiCpu, FiSmartphone, FiCode, FiServer, FiCheckCircle, FiGitMerge, FiDatabase
+  FiSmartphone,
+  FiCode,
+  FiDatabase,
+  FiServer,
+  FiCloud,
+  FiSliders,
+  FiLayout,
+  FiCheckCircle,
+  FiGitPullRequest,
+  FiLock,
+  FiCpu,
+  FiSearch,
+  FiLayers
 } from 'react-icons/fi';
 import {
-  SiReact, SiTypescript, SiJavascript, SiFlutter, SiFirebase, SiGraphql, SiJest, SiAmazonaws, SiRedux, SiGit, SiJira, SiFigma
+  SiTypescript,
+  SiJavascript,
+  SiReact,
+  SiNextdotjs,
+  SiTailwindcss,
+  SiRedux,
+  SiGraphql,
+  SiFirebase,
+  SiAmazonaws,
+  SiJest,
+  SiGit,
+  SiGithubactions,
+  SiApple,
+  SiGoogleplay,
+  SiFigma
 } from 'react-icons/si';
-import { theme } from '../styles/theme';
 
-const SkillsWrapper = styled.section`
+const SkillsSection = styled.section`
+  padding: 100px 1.5rem;
   position: relative;
-  min-height: 100vh;
-  padding: 100px 2rem;
-  background: ${props => props.theme.colors.background};
   overflow: hidden;
+  background: ${props => props.theme.colors.backgroundSecondary};
 
   &::before {
     content: '';
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 900px;
-    height: 900px;
-    background-image: radial-gradient(
-      circle,
-      ${props => props.theme.colors.primary}22,
-      transparent 60%
-    );
     transform: translate(-50%, -50%);
-    filter: blur(100px);
-    z-index: 0;
-    animation: pulse 18s infinite ease-in-out alternate;
+    width: 800px;
+    height: 800px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
+    filter: blur(120px);
+    pointer-events: none;
+  }
+
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    padding: 75px 1rem;
+  }
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    padding: 60px 0.75rem;
   }
 `;
 
 const Container = styled.div`
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
   position: relative;
   z-index: 1;
@@ -44,295 +71,586 @@ const Container = styled.div`
 
 const SectionHeader = styled(motion.div)`
   text-align: center;
-  margin-bottom: 4rem;
+  margin-bottom: 3.5rem;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    margin-bottom: 2rem;
+  }
+`;
+
+const SectionTag = styled.span`
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: ${props => props.theme.colors.primaryLight};
+  background: rgba(99, 102, 241, 0.1);
+  padding: 0.35rem 1rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  margin-bottom: 1rem;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    font-size: 0.74rem;
+    padding: 0.3rem 0.85rem;
+    letter-spacing: 1.5px;
+    margin-bottom: 0.75rem;
+  }
 `;
 
 const SectionTitle = styled.h2`
-  font-size: 3rem;
+  font-size: clamp(1.8rem, 5.5vw, 3rem);
   font-weight: 800;
-  color: #fff;
   letter-spacing: -1px;
-  margin-bottom: 0.5rem;
+  color: #fff;
+  margin-bottom: 0.75rem;
+
+  span {
+    background: ${props => props.theme.gradients.cyanIndigo};
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    letter-spacing: -0.5px;
+    margin-bottom: 0.5rem;
+  }
 `;
 
 const SectionSubtitle = styled.p`
-    font-size: 1.1rem;
-    color: ${props => props.theme.colors.textSecondary};
-`;
+  font-size: 1.05rem;
+  color: ${props => props.theme.colors.textSecondary};
+  max-width: 600px;
+  margin: 0 auto;
 
-const TechStackCard = styled(motion.div)`
-  background: ${props => props.theme.colors.cardBg};
-  border: 1px solid ${props => props.theme.colors.cardBorder};
-  border-radius: 16px;
-  padding: 2rem 2.5rem;
-  backdrop-filter: blur(10px);
-  margin-bottom: 4rem;
-
-  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
-    padding: 1.5rem;
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    font-size: 0.92rem;
+    line-height: 1.6;
   }
 `;
 
-const CategoryGroup = styled.div`
-  &:not(:last-child) {
-    margin-bottom: 2.5rem;
+const FilterControls = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    gap: 1rem;
+    margin-bottom: 2rem;
   }
 `;
 
-const CategoryTitle = styled.h3`
+const SearchContainer = styled.div`
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+`;
+
+const SearchInput = styled.input`
+  width: 100%;
+  padding: 0.8rem 1.25rem 0.8rem 2.85rem;
+  border-radius: 9999px;
+  background: rgba(17, 23, 38, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-size: 0.95rem;
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+
+  &:focus {
+    outline: none;
+    border-color: ${props => props.theme.colors.primaryLight};
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+    background: rgba(17, 23, 38, 0.95);
+  }
+
+  &::placeholder {
+    color: #64748b;
+  }
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    font-size: 16px;
+    padding: 0.72rem 1.1rem 0.72rem 2.6rem;
+  }
+`;
+
+const SearchIconWrapper = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 1.15rem;
+  transform: translateY(-50%);
+  color: #64748b;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  font-size: 1.25rem;
+  pointer-events: none;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    left: 1rem;
+  }
+`;
+
+const FilterTabs = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    gap: 0.45rem;
+  }
+`;
+
+const FilterTab = styled.button`
+  padding: 0.5rem 1.15rem;
+  border-radius: 9999px;
+  font-size: 0.85rem;
   font-weight: 600;
-  color: ${props => props.theme.colors.text};
-  margin-bottom: 1.5rem;
-  
-  svg {
-    color: ${props => props.theme.colors.primary};
+  color: ${props => (props.active ? '#fff' : props.theme.colors.textSecondary)};
+  background: ${props => (props.active ? props.theme.gradients.primary : 'rgba(255, 255, 255, 0.04)')};
+  border: 1px solid ${props => (props.active ? 'transparent' : 'rgba(255, 255, 255, 0.08)')};
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: ${props => (props.active ? '0 4px 15px rgba(99, 102, 241, 0.35)' : 'none')};
+
+  &:hover {
+    color: #fff;
+    background: ${props => (props.active ? props.theme.gradients.primary : 'rgba(255, 255, 255, 0.08)')};
+    border-color: ${props => (props.active ? 'transparent' : 'rgba(99, 102, 241, 0.3)')};
+  }
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    font-size: 0.78rem;
+    padding: 0.4rem 0.85rem;
   }
 `;
 
 const SkillsGrid = styled(motion.div)`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+  gap: 1.5rem;
+
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+`;
+
+const SkillCategoryCard = styled(motion.div)`
+  background: ${props => props.theme.colors.cardBg};
+  border: 1px solid ${props => props.theme.colors.cardBorder};
+  border-radius: 18px;
+  padding: 1.75rem;
+  backdrop-filter: blur(12px);
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  transition: all 0.3s ease;
+  position: relative;
+
+  &:hover {
+    border-color: ${props => props.theme.colors.cardBorderHover};
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  }
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    padding: 1.25rem 1rem;
+    border-radius: 14px;
+  }
+`;
+
+const CardHead = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+`;
+
+const CategoryInfo = styled.div`
+  display: flex;
+  align-items: center;
   gap: 0.75rem;
 `;
 
-const SkillPill = styled(motion.div)`
+const CategoryIconWrapper = styled.div`
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: ${props => props.bg || 'rgba(99, 102, 241, 0.15)'};
+  color: ${props => props.color || props.theme.colors.primaryLight};
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: ${props => props.theme.colors.textSecondary};
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  
-  svg {
-    font-size: 1.1rem;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    width: 36px;
+    height: 36px;
+    font-size: 1.05rem;
   }
-  
+`;
+
+const CategoryName = styled.h3`
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    font-size: 1rem;
+  }
+`;
+
+const SkillCountBadge = styled.span`
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+`;
+
+const SkillsPillsContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    gap: 0.45rem;
+  }
+`;
+
+const SkillBadge = styled(motion.span)`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  color: #e2e8f0;
+  transition: all 0.2s ease;
+
+  svg {
+    font-size: 0.95rem;
+    color: ${props => props.theme.colors.cyanLight};
+    flex-shrink: 0;
+  }
+
   &:hover {
+    background: rgba(99, 102, 241, 0.15);
+    border-color: rgba(99, 102, 241, 0.35);
     color: #fff;
-    background: ${props => props.theme.colors.primary}40;
-    border-color: ${props => props.theme.colors.primary}80;
     transform: translateY(-2px);
   }
-`;
 
-const ToolsGrid = styled.div`
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 1.5rem;
-`;
-
-const ToolCard = styled(motion.div)`
-    background: ${props => props.theme.colors.cardBg};
-    border: 1px solid ${props => props.theme.colors.cardBorder};
-    border-radius: 12px;
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    text-align: center;
-    transition: all 0.3s ease;
-
-    &:hover {
-        transform: translateY(-5px);
-        border-color: ${props => props.theme.colors.cardBorderHover};
-        box-shadow: 0 0 20px ${props => props.theme.colors.primary}30;
-    }
-
-    svg {
-        font-size: 2.5rem;
-        color: ${props => props.theme.colors.primary};
-    }
-`;
-
-const ToolName = styled.span`
-    font-size: 1rem;
-    font-weight: 500;
-    color: ${props => props.theme.colors.text};
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    font-size: 0.78rem;
+    padding: 0.35rem 0.65rem;
+    word-break: break-word;
+    max-width: 100%;
+  }
 `;
 
 const Skills = () => {
-  const techStack = [
+  const [activeGroup, setActiveGroup] = useState('all');
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const skillCategories = [
     {
-      category: 'Mobile Development',
-      icon: <FiSmartphone />,
-      skills: [
-        { name: 'React Native (CLI & Expo)', icon: <SiReact /> },
-        { name: 'Cross-platform Architecture', icon: <FiCpu /> },
-        { name: 'iOS & Android Build & Deployment (App Store / Play Store)', icon: <FiSmartphone /> },
-      ]
-    },
-    {
-      category: 'Languages',
+      id: 'languages',
+      group: 'core',
+      name: 'Programming Languages',
       icon: <FiCode />,
+      iconColor: '#38bdf8',
+      iconBg: 'rgba(56, 189, 248, 0.15)',
       skills: [
-        { name: 'TypeScript', icon: <SiTypescript /> },
-        { name: 'JavaScript (ES6+)', icon: <SiJavascript /> },
-        { name: 'Java', icon: <FiCode /> },
-        { name: 'Swift', icon: <FiCode /> },
+        { name: 'TypeScript', icon: <SiTypescript color="#38bdf8" /> },
+        { name: 'JavaScript (ES6+)', icon: <SiJavascript color="#facc15" /> },
+        { name: 'Java', icon: <FiCode color="#f97316" /> }
       ]
     },
     {
-      category: 'State Management',
+      id: 'mobile',
+      group: 'core',
+      name: 'Mobile Development',
+      icon: <FiSmartphone />,
+      iconColor: '#818cf8',
+      iconBg: 'rgba(129, 140, 248, 0.15)',
+      skills: [
+        { name: 'React Native CLI', icon: <SiReact color="#38bdf8" /> },
+        { name: 'Expo', icon: <SiReact color="#fff" /> },
+        { name: 'Cross-Platform Architecture', icon: <FiLayers /> },
+        { name: 'Native Module Integration', icon: <FiSliders /> },
+        { name: 'Application Lifecycle Management', icon: <FiCheckCircle /> }
+      ]
+    },
+    {
+      id: 'frontend',
+      group: 'core',
+      name: 'Frontend Development',
+      icon: <FiLayout />,
+      iconColor: '#34d399',
+      iconBg: 'rgba(52, 211, 153, 0.15)',
+      skills: [
+        { name: 'React.js', icon: <SiReact color="#38bdf8" /> },
+        { name: 'Next.js', icon: <SiNextdotjs color="#fff" /> },
+        { name: 'Responsive Web Design', icon: <FiLayout /> },
+        { name: 'Tailwind CSS', icon: <SiTailwindcss color="#38bdf8" /> },
+        { name: 'Reusable Components', icon: <FiCode /> }
+      ]
+    },
+    {
+      id: 'state',
+      group: 'state_api',
+      name: 'State Management & Fetching',
       icon: <FiDatabase />,
+      iconColor: '#c084fc',
+      iconBg: 'rgba(192, 132, 252, 0.15)',
       skills: [
-        { name: 'Redux Toolkit', icon: <SiRedux /> },
-        { name: 'React Query', icon: <SiReact /> },
-        { name: 'Context API', icon: <SiReact /> },
+        { name: 'Redux Toolkit', icon: <SiRedux color="#a855f7" /> },
+        { name: 'RTK Query', icon: <SiRedux color="#c084fc" /> },
+        { name: 'React Query', icon: <FiDatabase /> },
+        { name: 'Zustand', icon: <FiDatabase /> },
+        { name: 'Context API', icon: <SiReact color="#38bdf8" /> },
+        { name: 'Client-Side Caching', icon: <FiLayers /> },
+        { name: 'AsyncStorage', icon: <FiDatabase /> },
+        { name: 'MMKV Storage', icon: <FiDatabase /> }
       ]
     },
     {
-      category: 'API Integration',
+      id: 'api',
+      group: 'state_api',
+      name: 'API Integration',
       icon: <FiServer />,
+      iconColor: '#f472b6',
+      iconBg: 'rgba(244, 114, 182, 0.15)',
       skills: [
         { name: 'REST APIs', icon: <FiServer /> },
-        { name: 'Open API SDK', icon: <FiCode /> },
-        { name: 'GraphQL (Apollo/Client-side caching)', icon: <SiGraphql /> },
+        { name: 'GraphQL', icon: <SiGraphql color="#ec4899" /> },
+        { name: 'Apollo Client', icon: <SiGraphql color="#ec4899" /> },
+        { name: 'OpenAPI SDK Integration', icon: <FiCode /> },
+        { name: 'JSON Data Handling', icon: <FiCode /> }
       ]
     },
     {
-      category: 'Mobile Features',
+      id: 'backend',
+      group: 'backend_cloud',
+      name: 'Backend Services & Cloud',
+      icon: <FiCloud />,
+      iconColor: '#fbbf24',
+      iconBg: 'rgba(251, 191, 36, 0.15)',
+      skills: [
+        { name: 'Firebase Authentication', icon: <SiFirebase color="#f59e0b" /> },
+        { name: 'Cloud Firestore', icon: <SiFirebase color="#f59e0b" /> },
+        { name: 'Firebase Cloud Messaging (FCM)', icon: <SiFirebase color="#f59e0b" /> },
+        { name: 'AWS Service Integrations', icon: <SiAmazonaws color="#f97316" /> }
+      ]
+    },
+    {
+      id: 'features',
+      group: 'core',
+      name: 'Mobile Features & Hardware',
       icon: <FiSmartphone />,
+      iconColor: '#22d3ee',
+      iconBg: 'rgba(34, 211, 238, 0.15)',
       skills: [
         { name: 'Push Notifications (FCM)', icon: <FiSmartphone /> },
         { name: 'Deep Linking & Universal Links', icon: <FiCode /> },
-        { name: 'Offline Support (AsyncStorage/MMKV)', icon: <FiDatabase /> },
-        { name: 'Background Tasks', icon: <FiCpu /> },
-        { name: 'App Lifecycle Management', icon: <FiSmartphone /> },
+        { name: 'Offline Data Handling', icon: <FiDatabase /> },
+        { name: 'Camera Integration', icon: <FiSmartphone /> },
+        { name: 'SMS Integration', icon: <FiSmartphone /> },
+        { name: 'Razorpay Payment Gateway', icon: <FiCheckCircle /> }
       ]
     },
     {
-      category: 'Performance Optimization',
-      icon: <FiCpu />,
+      id: 'ui_a11y',
+      group: 'core',
+      name: 'UI Engineering & Accessibility',
+      icon: <FiLayout />,
+      iconColor: '#a78bfa',
+      iconBg: 'rgba(167, 139, 250, 0.15)',
       skills: [
-        { name: 'Re-render optimization', icon: <FiCpu /> },
-        { name: 'lazy loading', icon: <FiCpu /> },
-        { name: 'memorization', icon: <FiCpu /> },
-        { name: 'efficient state updates', icon: <FiDatabase /> },
-        { name: 'memory optimization', icon: <FiCpu /> },
+        { name: 'Figma-to-Code Implementation', icon: <SiFigma color="#f43f5e" /> },
+        { name: 'Responsive Layouts', icon: <FiLayout /> },
+        { name: 'Design-System Principles', icon: <FiLayers /> },
+        { name: 'WCAG Accessibility Fundamentals', icon: <FiCheckCircle /> }
       ]
     },
     {
-      category: 'Payments & Transactions',
+      id: 'testing',
+      group: 'testing_devops',
+      name: 'Testing & Quality Assurance',
       icon: <FiCheckCircle />,
+      iconColor: '#34d399',
+      iconBg: 'rgba(52, 211, 153, 0.15)',
       skills: [
-        { name: 'Payment Gateway Integration (Razorpay)', icon: <FiCheckCircle /> },
-        { name: 'secure transaction handling', icon: <FiCheckCircle /> },
-        { name: 'checkout flows', icon: <FiCheckCircle /> },
+        { name: 'Jest', icon: <SiJest color="#ef4444" /> },
+        { name: 'Unit Testing', icon: <FiCheckCircle /> },
+        { name: 'React Native Debugging (Flipper)', icon: <FiCode /> },
+        { name: 'Basic End-to-End Testing', icon: <FiCheckCircle /> },
+        { name: 'Appium', icon: <FiCpu /> }
       ]
     },
     {
-      category: 'Navigation',
-      icon: <FiCode />,
+      id: 'build_release',
+      group: 'testing_devops',
+      name: 'Build, CI/CD & Store Release',
+      icon: <FiGitPullRequest />,
+      iconColor: '#f97316',
+      iconBg: 'rgba(249, 115, 22, 0.15)',
       skills: [
-        { name: 'React Navigation (complex navigation flows, deep linking)', icon: <SiReact /> },
+        { name: 'Git & GitHub Version Control', icon: <SiGit color="#f97316" /> },
+        { name: 'GitHub Actions CI/CD', icon: <SiGithubactions color="#38bdf8" /> },
+        { name: 'Apple App Store Deployment', icon: <SiApple color="#fff" /> },
+        { name: 'Google Play Store Deployment', icon: <SiGoogleplay color="#34d399" /> }
       ]
     },
     {
-      category: 'Backend & Services',
-      icon: <FiServer />,
+      id: 'security',
+      group: 'ai_security',
+      name: 'Application Security',
+      icon: <FiLock />,
+      iconColor: '#ef4444',
+      iconBg: 'rgba(239, 68, 68, 0.15)',
       skills: [
-        { name: 'Firebase (Auth, Firestore, Notifications)', icon: <SiFirebase /> },
-        { name: 'AWS integrations', icon: <SiAmazonaws /> },
+        { name: 'Authentication Flows', icon: <FiLock /> },
+        { name: 'Token & Session Handling', icon: <FiLock /> },
+        { name: 'Secure API Integration', icon: <FiServer /> },
+        { name: 'Awareness of CORS, XSS, & CSRF', icon: <FiLock /> }
       ]
     },
     {
-      category: 'DevOps & Release',
-      icon: <FiGitMerge />,
-      skills: [
-        { name: 'CI/CD (GitHub Actions)', icon: <FiGitMerge /> },
-        { name: 'automated builds', icon: <FiCpu /> },
-        { name: 'App Store & Play Store release management', icon: <FiSmartphone /> },
-      ]
-    },
-    {
-      category: 'Testing',
-      icon: <FiCheckCircle />,
-      skills: [
-        { name: 'Jest', icon: <SiJest /> },
-        { name: 'Appium (unit & basic E2E testing)', icon: <FiCpu /> },
-      ]
-    },
-    {
-      category: 'AI-Assisted Development',
+      id: 'ai_assisted',
+      group: 'ai_security',
+      name: 'AI-Assisted Development',
       icon: <FiCpu />,
+      iconColor: '#c084fc',
+      iconBg: 'rgba(192, 132, 252, 0.15)',
       skills: [
+        { name: 'AI-Generated Code Review', icon: <FiCheckCircle /> },
         { name: 'Prompt Engineering', icon: <FiCode /> },
-        { name: 'Workflow Automation', icon: <FiCpu /> },
-        { name: 'Code Generation & Debugging (Cursor, Claude)', icon: <FiCode /> },
+        { name: 'Cursor AI', icon: <FiCpu /> },
+        { name: 'AntiGravity', icon: <FiCpu /> },
+        { name: 'Claude', icon: <FiCpu /> },
+        { name: 'AI-Assisted Debugging', icon: <FiCode /> }
       ]
     }
   ];
 
-  const tools = [
-    { name: 'Xcode', icon: <FiCode /> },
-    { name: 'Android Studio', icon: <FiSmartphone /> },
-    { name: 'Git', icon: <SiGit /> },
-    { name: 'GitHub', icon: <FiGitMerge /> },
-    { name: 'JIRA', icon: <SiJira /> },
+  const groupTabs = [
+    { id: 'all', label: 'All 12 Domains' },
+    { id: 'core', label: 'Mobile & Frontend' },
+    { id: 'state_api', label: 'State & APIs' },
+    { id: 'backend_cloud', label: 'Cloud & Backend' },
+    { id: 'testing_devops', label: 'Testing & DevOps' },
+    { id: 'ai_security', label: 'AI & Security' }
   ];
 
-  const gridVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.05 } },
-  };
-
-  const pillVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: { y: 0, opacity: 1 },
-  };
+  const filteredCategories = useMemo(() => {
+    return skillCategories
+      .filter(category => activeGroup === 'all' || category.group === activeGroup)
+      .map(category => {
+        if (!searchTerm.trim()) return category;
+        const matchingSkills = category.skills.filter(s =>
+          s.name.toLowerCase().includes(searchTerm.toLowerCase().trim())
+        );
+        const categoryMatches = category.name.toLowerCase().includes(searchTerm.toLowerCase().trim());
+        if (categoryMatches || matchingSkills.length > 0) {
+          return {
+            ...category,
+            skills: categoryMatches ? category.skills : matchingSkills
+          };
+        }
+        return null;
+      })
+      .filter(Boolean);
+  }, [activeGroup, searchTerm]);
 
   return (
-    <ThemeProvider theme={theme}>
-      <SkillsWrapper>
-        <Container>
-          <SectionHeader initial={{ y: -30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.6 }}>
-            <SectionTitle>Skills & Expertise</SectionTitle>
-            <SectionSubtitle>The technologies and tools I use to build modern applications.</SectionSubtitle>
-          </SectionHeader>
+    <SkillsSection id="skills">
+      <Container>
+        <SectionHeader
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <SectionTag>Technical Proficiency</SectionTag>
+          <SectionTitle>
+            Specialized <span>Skills & Ecosystem</span>
+          </SectionTitle>
+          <SectionSubtitle>
+            A comprehensive overview of my core competencies, libraries, architectures, and engineering tools.
+          </SectionSubtitle>
+        </SectionHeader>
 
-          <TechStackCard initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.8, delay: 0.2 }}>
-            {techStack.map(category => (
-              <CategoryGroup key={category.category}>
-                <CategoryTitle>{category.icon} {category.category}</CategoryTitle>
-                <SkillsGrid variants={gridVariants} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }}>
-                  {category.skills.map(skill => (
-                    <SkillPill key={skill.name} variants={pillVariants}>
+        <FilterControls>
+          <SearchContainer>
+            <SearchIconWrapper>
+              <FiSearch size={18} />
+            </SearchIconWrapper>
+            <SearchInput
+              type="text"
+              placeholder="Search skills (e.g. Redux, GraphQL, MMKV, Jest, Next.js, WCAG)..."
+              value={searchTerm}
+              onChange={e => setSearchTerm(e.target.value)}
+            />
+          </SearchContainer>
+
+          <FilterTabs>
+            {groupTabs.map(tab => (
+              <FilterTab
+                key={tab.id}
+                active={activeGroup === tab.id}
+                onClick={() => setActiveGroup(tab.id)}
+              >
+                {tab.label}
+              </FilterTab>
+            ))}
+          </FilterTabs>
+        </FilterControls>
+
+        <SkillsGrid layout>
+          <AnimatePresence>
+            {filteredCategories.map(cat => (
+              <SkillCategoryCard
+                key={cat.id}
+                layout
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.3 }}
+              >
+                <CardHead>
+                  <CategoryInfo>
+                    <CategoryIconWrapper bg={cat.iconBg} color={cat.iconColor}>
+                      {cat.icon}
+                    </CategoryIconWrapper>
+                    <CategoryName>{cat.name}</CategoryName>
+                  </CategoryInfo>
+                  <SkillCountBadge>{cat.skills.length} skills</SkillCountBadge>
+                </CardHead>
+
+                <SkillsPillsContainer>
+                  {cat.skills.map((skill, sIdx) => (
+                    <SkillBadge key={sIdx} whileHover={{ y: -2 }}>
                       {skill.icon}
                       <span>{skill.name}</span>
-                    </SkillPill>
+                    </SkillBadge>
                   ))}
-                </SkillsGrid>
-              </CategoryGroup>
+                </SkillsPillsContainer>
+              </SkillCategoryCard>
             ))}
-          </TechStackCard>
-
-          <motion.div initial={{ y: 50, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.8 }}>
-            <SectionHeader style={{ marginBottom: '3rem' }}>
-              <SectionTitle style={{ fontSize: '2.5rem' }}>Tools & Platforms</SectionTitle>
-            </SectionHeader>
-            <ToolsGrid>
-              {tools.map((tool, index) => (
-                <ToolCard key={tool.name} initial={{ y: 30, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true, amount: 0.5 }} transition={{ duration: 0.6, delay: index * 0.1 }}>
-                  {tool.icon}
-                  <ToolName>{tool.name}</ToolName>
-                </ToolCard>
-              ))}
-            </ToolsGrid>
-          </motion.div>
-        </Container>
-      </SkillsWrapper>
-    </ThemeProvider>
+          </AnimatePresence>
+        </SkillsGrid>
+      </Container>
+    </SkillsSection>
   );
 };
 

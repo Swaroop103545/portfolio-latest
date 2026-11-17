@@ -1,333 +1,688 @@
 import React, { useState } from 'react';
-import styled, { createGlobalStyle, ThemeProvider } from 'styled-components';
+import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiGithub, FiExternalLink, FiSmartphone, FiMonitor, FiCode } from 'react-icons/fi';
-import { theme } from '../styles/theme';
+import {
+  FiSmartphone,
+  FiGlobe,
+  FiExternalLink,
+  FiGithub,
+  FiLayers,
+  FiCheckCircle,
+  FiArrowUpRight,
+  FiShoppingBag,
+  FiActivity,
+  FiUsers,
+  FiShield
+} from 'react-icons/fi';
+import { SiApple, SiGoogleplay, SiReact, SiNextdotjs } from 'react-icons/si';
 
-const GlobalStyle = createGlobalStyle`
-  body {
-    background-color: ${props => props.theme.colors.background};
-    color: ${props => props.theme.colors.text};
-    font-family: 'Inter', sans-serif;
-  }
-`;
-
-const ProjectsWrapper = styled.section`
+const ProjectsSection = styled.section`
+  padding: 100px 1.5rem;
   position: relative;
-  padding: 100px 0;
-  background: ${props => props.theme.colors.background};
   overflow: hidden;
+  background: ${props => props.theme.colors.background};
 
   &::before {
     content: '';
     position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 800px;
-    height: 800px;
-    background-image: radial-gradient(
-      circle,
-      ${props => props.theme.colors.primary}33,
-      transparent 60%
-    );
-    transform: translate(-50%, -50%);
-    filter: blur(100px);
-    z-index: 0;
-    animation: pulse 15s infinite ease-in-out;
+    top: 25%;
+    right: 5%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
+    filter: blur(120px);
+    pointer-events: none;
   }
 
-  @keyframes pulse {
-    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
-    50% { transform: translate(-45%, -55%) scale(1.2); opacity: 0.8; }
-    100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    padding: 75px 1rem;
+  }
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    padding: 60px 0.75rem;
   }
 `;
 
 const Container = styled.div`
-  max-width: 1200px;
+  max-width: 1240px;
   margin: 0 auto;
-  padding: 0 2rem;
   position: relative;
   z-index: 1;
 `;
 
 const SectionHeader = styled(motion.div)`
   text-align: center;
-  margin-bottom: 4rem;
+  margin-bottom: 3.5rem;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    margin-bottom: 2rem;
+  }
+`;
+
+const SectionTag = styled.span`
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: ${props => props.theme.colors.primaryLight};
+  background: rgba(99, 102, 241, 0.1);
+  padding: 0.35rem 1rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  margin-bottom: 1rem;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    font-size: 0.74rem;
+    padding: 0.3rem 0.85rem;
+    letter-spacing: 1.5px;
+    margin-bottom: 0.75rem;
+  }
 `;
 
 const SectionTitle = styled.h2`
-  font-size: 3rem;
+  font-size: clamp(1.8rem, 5.5vw, 3rem);
   font-weight: 800;
-  color: #fff;
-  margin-bottom: 0.5rem;
   letter-spacing: -1px;
+  color: #fff;
+  margin-bottom: 0.75rem;
+
+  span {
+    background: ${props => props.theme.gradients.primary};
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    letter-spacing: -0.5px;
+    margin-bottom: 0.5rem;
+  }
 `;
 
 const SectionSubtitle = styled.p`
-    font-size: 1.1rem;
-    color: ${props => props.theme.colors.textSecondary};
+  font-size: 1.05rem;
+  color: ${props => props.theme.colors.textSecondary};
+  max-width: 650px;
+  margin: 0 auto;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    font-size: 0.92rem;
+    line-height: 1.6;
+  }
 `;
 
-const FilterPills = styled(motion.div)`
+const FilterPillsRow = styled.div`
   display: flex;
   justify-content: center;
-  gap: 0.75rem;
-  margin-bottom: 4rem;
   flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-bottom: 3.5rem;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    gap: 0.45rem;
+    margin-bottom: 2rem;
+  }
 `;
 
-const FilterPill = styled(motion.button)`
-  display: flex;
+const FilterPill = styled.button`
+  display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.6rem 1.2rem;
-  border: 1px solid ${props => props.theme.colors.cardBorder};
-  background: ${props => (props.active ? `${props.theme.colors.primary}30` : 'transparent')};
+  padding: 0.55rem 1.25rem;
+  border-radius: 9999px;
+  font-size: 0.88rem;
+  font-weight: 600;
   color: ${props => (props.active ? '#fff' : props.theme.colors.textSecondary)};
-  border-radius: 100px;
-  font-weight: 500;
+  background: ${props => (props.active ? props.theme.gradients.primary : 'rgba(255, 255, 255, 0.04)')};
+  border: 1px solid ${props => (props.active ? 'transparent' : 'rgba(255, 255, 255, 0.08)')};
   cursor: pointer;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(5px);
-  
+  transition: all 0.25s ease;
+  box-shadow: ${props => (props.active ? '0 4px 15px rgba(99, 102, 241, 0.35)' : 'none')};
+
   &:hover {
     color: #fff;
-    border-color: ${props => props.theme.colors.primary}80;
+    background: ${props => (props.active ? props.theme.gradients.primary : 'rgba(255, 255, 255, 0.08)')};
+  }
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    font-size: 0.78rem;
+    padding: 0.42rem 0.85rem;
+    gap: 0.35rem;
   }
 `;
 
 const ProjectsGrid = styled(motion.div)`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
   gap: 2rem;
+
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
 `;
 
 const ProjectCard = styled(motion.div)`
   background: ${props => props.theme.colors.cardBg};
   border: 1px solid ${props => props.theme.colors.cardBorder};
-  border-radius: 16px;
+  border-radius: 20px;
   overflow: hidden;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
   display: flex;
   flex-direction: column;
+  backdrop-filter: blur(12px);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   position: relative;
+
+  &:hover {
+    border-color: ${props => props.theme.colors.cardBorderHover};
+    transform: translateY(-4px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.45), 0 0 25px rgba(99, 102, 241, 0.15);
+  }
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    border-radius: 16px;
+  }
 `;
 
-const StatusBadge = styled.div`
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  padding: 0.3rem 0.6rem;
-  border-radius: 6px;
-  background: ${props => props.theme.colors.primary}B3; /* Semi-transparent */
-  color: #fff;
-  font-size: 0.7rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  box-shadow: 0 0 10px ${props => props.theme.colors.primary}70;
-  z-index: 2;
-`;
-
-const CardContent = styled.div`
-  padding: 1.75rem;
+const CardTop = styled.div`
+  padding: 1.75rem 1.75rem 1rem;
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
+  flex: 1;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    padding: 1.25rem 1rem 0.85rem;
+  }
 `;
 
-const CardHeader = styled.div`
+const CardMetaRow = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   margin-bottom: 1rem;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    margin-bottom: 0.75rem;
+  }
+`;
+
+const PlatformBadge = styled.span`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: ${props => props.bg || 'rgba(99, 102, 241, 0.15)'};
+  border: 1px solid ${props => props.border || 'rgba(99, 102, 241, 0.3)'};
+  color: ${props => props.color || props.theme.colors.primaryLight};
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.6rem;
+  }
+`;
+
+const RoleTag = styled.span`
+  font-size: 0.75rem;
+  color: #94a3b8;
+  font-weight: 500;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    font-size: 0.7rem;
+  }
 `;
 
 const ProjectTitle = styled.h3`
   font-size: 1.4rem;
-  font-weight: 600;
-  color: ${props => props.theme.colors.text};
-  padding-right: 2.5rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.3px;
+  margin-bottom: 0.35rem;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    font-size: 1.25rem;
+  }
 `;
 
-const ProjectTypeIcon = styled.div`
-  color: ${props => props.theme.colors.textSecondary};
-  font-size: 1.5rem;
+const ProjectSubtitle = styled.h4`
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: ${props => props.theme.colors.cyanLight};
+  margin-bottom: 1rem;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    font-size: 0.85rem;
+    margin-bottom: 0.75rem;
+  }
 `;
 
 const ProjectDescription = styled.p`
+  font-size: 0.92rem;
+  line-height: 1.65;
   color: ${props => props.theme.colors.textSecondary};
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
-  flex-grow: 1;
+  margin-bottom: 1.25rem;
+  flex: 1;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    font-size: 0.88rem;
+    line-height: 1.55;
+    margin-bottom: 1rem;
+  }
 `;
 
-const ProjectTech = styled.div`
+const HighlightsList = styled.ul`
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    margin-bottom: 1.15rem;
+    gap: 0.35rem;
+  }
+`;
+
+const HighlightBullet = styled.li`
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #cbd5e1;
+
+  svg {
+    color: ${props => props.theme.colors.emeraldLight};
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    font-size: 0.8rem;
+  }
+`;
+
+const TechRow = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
+  gap: 0.45rem;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    gap: 0.35rem;
+    padding-top: 0.75rem;
+  }
 `;
 
 const TechTag = styled.span`
-  padding: 0.25rem 0.75rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: ${props => props.theme.colors.textSecondary};
-  border-radius: 6px;
   font-size: 0.75rem;
   font-weight: 500;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+  }
 `;
 
-const CardFooter = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.75rem;
-`;
-
-const ProjectLink = styled.a`
+const CardBottomBar = styled.div`
+  padding: 1.25rem 1.75rem;
+  background: rgba(13, 17, 26, 0.6);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
   display: flex;
   align-items: center;
+  justify-content: space-between;
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    padding: 0.9rem 1rem;
+  }
+`;
+
+const ActionButtonGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+
+  @media (max-width: 400px) {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+`;
+
+const PrimaryCardLink = styled.a`
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
-  color: ${props => props.theme.colors.textSecondary};
-  font-size: 1.25rem;
-  transition: all 0.3s ease;
+  gap: 0.45rem;
+  padding: 0.55rem 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+  background: ${props => props.theme.gradients.primary};
+  transition: all 0.2s ease;
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.25);
 
   &:hover {
-    color: ${props => props.theme.colors.primary};
-    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+    transform: translateY(-2px);
+    color: #fff;
+  }
+
+  @media (max-width: 400px) {
+    width: 100%;
+    min-height: 40px;
+  }
+`;
+
+const SecondaryCardLink = styled.a`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.55rem 0.85rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #94a3b8;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(99, 102, 241, 0.4);
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 400px) {
+    width: 100%;
+    min-height: 40px;
   }
 `;
 
 const Projects = () => {
-  const [activeFilter, setActiveFilter] = useState('all');
-
-  const filters = [
-    { id: 'all', label: 'All', icon: <FiCode /> },
-    { id: 'mobile', label: 'Mobile', icon: <FiSmartphone /> },
-    { id: 'web', label: 'Web', icon: <FiMonitor /> },
-  ];
+  const [filter, setFilter] = useState('all');
 
   const projects = [
     {
-      id: 10,
-      title: "SkillUp E-Learning App",
-      description: "An e-learning app with offline support & CRUD, built with React Native, Redux, and GraphQL.",
-      category: "mobile",
-      technologies: ["React Native", "GraphQL", "Apollo", "Redux", "Offline-First"],
-      github: "https://github.com",
-      liveUrl: "",
-      status: "ongoing"
+      id: 'pram-edu',
+      title: 'PRAM Edu',
+      subtitle: 'Education Management Platform',
+      category: 'mobile',
+      platform: 'App Store (iOS)',
+      platformIcon: <SiApple />,
+      platformBg: 'rgba(56, 189, 248, 0.12)',
+      platformBorder: 'rgba(56, 189, 248, 0.3)',
+      platformColor: '#38bdf8',
+      role: 'Lead Mobile Module Owner',
+      description:
+        'End-to-end mobile application supporting students, parents, faculty, tuition teachers, and bus operators with role-based access control and streamlined fee collections.',
+      highlights: [
+        'Built full Parent & Student workflows with reusable components',
+        'State management & caching with Redux Toolkit and RTK Query',
+        'Integrated Razorpay secure payment gateway workflows',
+        'Full production deployment and release maintenance'
+      ],
+      technologies: ['React Native', 'Expo', 'TypeScript', 'Redux Toolkit', 'RTK Query', 'REST APIs', 'Razorpay'],
+      liveUrl: 'https://apps.apple.com/in/app/pram-edu/id6502035315',
+      primaryActionLabel: 'App Store'
     },
     {
-      id: 11,
-      title: "Social Media App",
-      description: "Expo-based app with feed, likes, comments, profile editing, infinite scroll, and real-time chat.",
-      category: "mobile",
-      technologies: ["Expo", "Firebase", "WebSockets", "Infinite Scroll"],
-      github: "https://github.com",
-      liveUrl: "",
-      status: "ongoing"
+      id: 'movingful',
+      title: 'Movingful',
+      subtitle: 'Referral-Based Networking Application',
+      category: 'mobile',
+      platform: 'iOS / Reference',
+      platformIcon: <FiSmartphone />,
+      platformBg: 'rgba(168, 85, 247, 0.12)',
+      platformBorder: 'rgba(168, 85, 247, 0.3)',
+      platformColor: '#c084fc',
+      role: 'React Native Developer',
+      description:
+        'Business referral, favorites, and earnings platform built with React Native CLI, featuring smooth navigation and seamless GraphQL data orchestration.',
+      highlights: [
+        'Integrated GraphQL queries & mutations with client caching',
+        'Built reusable UI components & core user journeys',
+        'Authored Jest automated unit and regression tests',
+        'Performance optimization and memory leak mitigation'
+      ],
+      technologies: ['React Native CLI', 'TypeScript', 'Context API', 'GraphQL', 'AWS', 'Jest'],
+      liveUrl: 'https://movingful-ios.soft112.com/',
+      primaryActionLabel: 'View App Reference'
     },
     {
-      id: 12,
-      title: "Task & Habit Tracker",
-      description: "Personal productivity app with analytics, reminders, and gamified habit tracking.",
-      category: "mobile",
-      technologies: ["React Native", "TypeScript", "Reanimated 2", "Push Notifications"],
-      github: "https://github.com",
-      liveUrl: "",
-      status: "ongoing"
+      id: 'worldschool',
+      title: 'WorldSchool',
+      subtitle: 'Online Interactive Learning Application',
+      category: 'mobile',
+      platform: 'App Store / iOS',
+      platformIcon: <SiApple />,
+      platformBg: 'rgba(34, 211, 238, 0.12)',
+      platformBorder: 'rgba(34, 211, 238, 0.3)',
+      platformColor: '#22d3ee',
+      role: 'Mobile Engineer',
+      description:
+        'Real-time learning ecosystem featuring live chat, appointment scheduling, and multi-tenant class management across public and private groups.',
+      highlights: [
+        'Real-time chat & class schedule coordination with Firebase',
+        'Modular component architecture with Redux state handling',
+        'Optimized list rendering and smooth touch interactions',
+        'Defect resolution and ongoing App Store release support'
+      ],
+      technologies: ['React Native', 'React.js', 'Redux', 'Firebase', 'Real-Time Sync'],
+      liveUrl: 'https://apps.apple.com/ec/app/worldschool/id6443949707',
+      primaryActionLabel: 'App Store Link'
     },
-    { id: 1, title: "PRAM Edu", description: "Scalable mobile platform connecting students, parents, and faculty with role-based access and secure fee management.", category: "mobile", technologies: ["React Native", "Expo", "TypeScript", "Redux Toolkit", "RTK Query", "GitHub Actions"], liveUrl: "https://apps.apple.com/in/app/pram-edu/id6502035315", status: "completed" },
-    { id: 2, title: "Movingful", description: "Referral-based platform enabling users to recommend businesses, with intuitive navigation and rewards tracking.", category: "mobile", technologies: ["React Native", "TypeScript", "Context API", "GraphQL", "AWS", "Jest", "GitHub Actions"], liveUrl: "https://movingful-ios.soft112.com/", status: "completed" },
-    { id: 3, title: "WorldSchool", description: "Real-time learning platform with chat, flexible class management, and scalable architecture.", category: "mobile", technologies: ["React Native", "React JS", "Redux", "Firebase"], liveUrl: "https://play.google.com/store/apps/details?id=com.worldschool", status: "completed" },
-    { id: 4, title: "BookMart", description: "E-commerce mobile app featuring a product catalog, recommendation engine, and secure Razorpay checkout.", category: "mobile", technologies: ["React Native", "React JS", "TypeScript", "Redux Toolkit", "Firebase", "REST APIs"], liveUrl: "https://play.google.com/store/apps/details?id=com.bookmart", status: "completed" },
-    { id: 5, title: "Portfolio Website", description: "A sleek, modern portfolio built to showcase my skills and projects.", category: "web", technologies: ["React", "Styled-Components", "Framer Motion"], status: "completed" },
-    { id: 6, title: "Thruptis Food Darbar", description: "Online food ordering platform with customer accounts and admin panel.", category: "web", technologies: ["React", "Redux", "Firebase"], github: "https://github.com", liveUrl: "https://example.com", status: "completed" },
-    { id: 7, title: "Plants Management System", description: "Plant care app with online shopping, watering reminders, and admin panel.", category: "mobile", technologies: ["React Native", "Material UI", "Redux", "Firebase"], status: "completed" },
-    { id: 8, title: "Cab Ordering System", description: "Mobile app for booking cabs with real-time tracking and payments, and admin panel.", category: "web", technologies: ["React JS", "Material UI", "Redux", "ExpressJs", "Firebase"], status: "completed" },
-    { id: 9, title: "MediSync", description: "Health tracking app with Bluetooth integration and real-time data visualization.", category: "mobile", technologies: ["React Native", "TypeScript", "Redux", "BTE", "SVG Charts"], status: "completed" },
+    {
+      id: 'pram-dashboard',
+      title: 'PRAM Edu Admin Dashboard',
+      subtitle: 'Enterprise Management Portal',
+      category: 'web',
+      platform: 'Next.js Web Portal',
+      platformIcon: <SiNextdotjs />,
+      platformBg: 'rgba(16, 185, 129, 0.12)',
+      platformBorder: 'rgba(16, 185, 129, 0.3)',
+      platformColor: '#34d399',
+      role: 'Frontend Engineer',
+      description:
+        'Administrative dashboard featuring rich telemetry analytics, role-based user management, advanced filtering, server-driven pagination, and error states.',
+      highlights: [
+        'Built with Next.js, React, TypeScript, and Tailwind CSS',
+        'Clean REST API integrations with loading & error skeletons',
+        'Scalable component design with WCAG accessibility patterns',
+        'Jest unit testing and client performance optimization'
+      ],
+      technologies: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'REST APIs', 'Jest'],
+      liveUrl: 'https://portal.pram.education/login',
+      primaryActionLabel: 'Live Admin Portal'
+    },
+    {
+      id: 'shopswift',
+      title: 'ShopSwift',
+      subtitle: 'E-commerce Mobile Application',
+      category: 'mobile',
+      platform: 'React Native / Expo',
+      platformIcon: <FiShoppingBag />,
+      platformBg: 'rgba(245, 158, 11, 0.12)',
+      platformBorder: 'rgba(245, 158, 11, 0.3)',
+      platformColor: '#fbbf24',
+      role: 'Independent Architect',
+      description:
+        'Modern mobile shopping experience featuring instant product discovery, fuzzy search, persistent offline cart, and seamless checkout flows.',
+      highlights: [
+        'Redux Toolkit & RTK Query client-side caching',
+        'AsyncStorage persistent cart state across sessions',
+        'Sandbox payment gateway simulation with error recovery',
+        'Smooth animations and intuitive bottom-sheet filtering'
+      ],
+      technologies: ['React Native', 'Expo', 'TypeScript', 'Redux Toolkit', 'RTK Query', 'AsyncStorage'],
+      githubUrl: 'https://github.com/Swaroop103545',
+      primaryActionLabel: 'GitHub Project'
+    },
+    {
+      id: 'bookmart',
+      title: 'BookMart',
+      subtitle: 'Mobile Book Catalog & Ordering App',
+      category: 'mobile',
+      platform: 'Google Play Store',
+      platformIcon: <SiGoogleplay />,
+      platformBg: 'rgba(52, 211, 153, 0.12)',
+      platformBorder: 'rgba(52, 211, 153, 0.3)',
+      platformColor: '#34d399',
+      role: 'React Native Developer',
+      description:
+        'E-commerce mobile app with extensive book catalogs, user reviews, personalized recommendations, and Razorpay integrated payment checkout.',
+      highlights: [
+        'Firebase backend authentication and Firestore database',
+        'Razorpay payment gateway with automated status verification',
+        'Optimized search index and cached asset loading',
+        'Published and deployed to Google Play Store'
+      ],
+      technologies: ['React Native', 'TypeScript', 'Redux Toolkit', 'Firebase', 'Razorpay', 'REST APIs'],
+      liveUrl: 'https://play.google.com/store/apps/details?id=com.bookmart',
+      primaryActionLabel: 'Google Play'
+    }
   ];
 
-  const filteredProjects = activeFilter === 'all'
+  const filterTabs = [
+    { id: 'all', label: 'All Projects', icon: <FiLayers /> },
+    { id: 'mobile', label: 'Mobile Apps (iOS & Android)', icon: <FiSmartphone /> },
+    { id: 'web', label: 'Web & Portals', icon: <FiGlobe /> }
+  ];
+
+  const filteredProjects = filter === 'all'
     ? projects
-    : projects.filter(project => project.category === activeFilter);
-
-  const gridVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
-  };
-
-  const cardVariants = {
-    hidden: { y: 30, opacity: 0 },
-    visible: { y: 0, opacity: 1, transition: { duration: 0.5, ease: "easeOut" } },
-  };
+    : projects.filter(p => p.category === filter);
 
   return (
-    <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <ProjectsWrapper>
-        <Container>
-          <SectionHeader initial={{ y: -30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.6 }}>
-            <SectionTitle>My Work</SectionTitle>
-            <SectionSubtitle>A selection of projects that showcase my skills.</SectionSubtitle>
-          </SectionHeader>
+    <ProjectsSection id="projects">
+      <Container>
+        <SectionHeader
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <SectionTag>Featured Works</SectionTag>
+          <SectionTitle>
+            Production Apps & <span>Selected Projects</span>
+          </SectionTitle>
+          <SectionSubtitle>
+            A showcase of battle-tested mobile applications on the App Store and Google Play, alongside modern web dashboards.
+          </SectionSubtitle>
+        </SectionHeader>
 
-          <FilterPills initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.6, delay: 0.2 }}>
-            {filters.map(filter => (
-              <FilterPill
-                key={filter.id}
-                active={activeFilter === filter.id}
-                onClick={() => setActiveFilter(filter.id)}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+        <FilterPillsRow>
+          {filterTabs.map(tab => (
+            <FilterPill
+              key={tab.id}
+              active={filter === tab.id}
+              onClick={() => setFilter(tab.id)}
+            >
+              {tab.icon}
+              <span>{tab.label}</span>
+            </FilterPill>
+          ))}
+        </FilterPillsRow>
+
+        <ProjectsGrid layout>
+          <AnimatePresence>
+            {filteredProjects.map(project => (
+              <ProjectCard
+                key={project.id}
+                layout
+                initial={{ opacity: 0, y: 25 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 25 }}
+                transition={{ duration: 0.35 }}
               >
-                {filter.icon}
-                {filter.label}
-              </FilterPill>
-            ))}
-          </FilterPills>
+                <CardTop>
+                  <CardMetaRow>
+                    <PlatformBadge
+                      bg={project.platformBg}
+                      border={project.platformBorder}
+                      color={project.platformColor}
+                    >
+                      {project.platformIcon}
+                      <span>{project.platform}</span>
+                    </PlatformBadge>
+                    <RoleTag>{project.role}</RoleTag>
+                  </CardMetaRow>
 
-          <ProjectsGrid variants={gridVariants} initial="hidden" animate="visible">
-            <AnimatePresence>
-              {filteredProjects.map(project => (
-                <ProjectCard
-                  key={project.id}
-                  variants={cardVariants}
-                  layout
-                  whileHover={{
-                    borderColor: theme.colors.cardBorderHover,
-                    boxShadow: `0 0 25px ${theme.colors.primary}40`,
-                    y: -5
-                  }}
-                >
-                  {project.status === 'ongoing' && <StatusBadge>Ongoing</StatusBadge>}
-                  <CardContent>
-                    <CardHeader>
-                      <ProjectTitle>{project.title}</ProjectTitle>
-                      <ProjectTypeIcon>
-                        {project.category === 'mobile' ? <FiSmartphone /> : <FiMonitor />}
-                      </ProjectTypeIcon>
-                    </CardHeader>
-                    <ProjectDescription>{project.description}</ProjectDescription>
-                    <ProjectTech>
-                      {project.technologies.slice(0, 8).map((tech, i) => <TechTag key={i}>{tech}</TechTag>)}
-                    </ProjectTech>
-                    <CardFooter>
-                      {project.github && <ProjectLink href={project.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub Link"><FiGithub /></ProjectLink>}
-                      {project.liveUrl && <ProjectLink href={project.liveUrl} target="_blank" rel="noopener noreferrer" aria-label="Live Demo Link"><FiExternalLink /></ProjectLink>}
-                    </CardFooter>
-                  </CardContent>
-                </ProjectCard>
-              ))}
-            </AnimatePresence>
-          </ProjectsGrid>
-        </Container>
-      </ProjectsWrapper>
-    </ThemeProvider>
+                  <ProjectTitle>{project.title}</ProjectTitle>
+                  <ProjectSubtitle>{project.subtitle}</ProjectSubtitle>
+                  <ProjectDescription>{project.description}</ProjectDescription>
+
+                  <HighlightsList>
+                    {project.highlights.map((item, idx) => (
+                      <HighlightBullet key={idx}>
+                        <FiCheckCircle size={14} />
+                        <span>{item}</span>
+                      </HighlightBullet>
+                    ))}
+                  </HighlightsList>
+
+                  <TechRow>
+                    {project.technologies.map((t, idx) => (
+                      <TechTag key={idx}>{t}</TechTag>
+                    ))}
+                  </TechRow>
+                </CardTop>
+
+                <CardBottomBar>
+                  <ActionButtonGroup>
+                    {project.liveUrl && (
+                      <PrimaryCardLink
+                        href={project.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <span>{project.primaryActionLabel}</span>
+                        <FiArrowUpRight size={16} />
+                      </PrimaryCardLink>
+                    )}
+
+                    {project.githubUrl && (
+                      <PrimaryCardLink
+                        href={project.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <FiGithub size={16} />
+                        <span>GitHub</span>
+                      </PrimaryCardLink>
+                    )}
+
+                    <SecondaryCardLink
+                      href="https://github.com/Swaroop103545"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="View GitHub"
+                    >
+                      <FiGithub size={16} />
+                    </SecondaryCardLink>
+                  </ActionButtonGroup>
+                </CardBottomBar>
+              </ProjectCard>
+            ))}
+          </AnimatePresence>
+        </ProjectsGrid>
+      </Container>
+    </ProjectsSection>
   );
 };
 

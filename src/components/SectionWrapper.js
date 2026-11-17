@@ -23,6 +23,14 @@ const Wrapper = styled.section`
   align-items: center;
   justify-content: center;
 
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    padding: 75px 1rem;
+  }
+
+  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
+    padding: 60px 0.75rem;
+  }
+
   /* Aurora Glow Effect */
   &::before {
     content: '';
